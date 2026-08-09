@@ -89,3 +89,5 @@ import CongruenceTheoryHigherOrder.MacroMicroSum
 import CongruenceTheoryHigherOrder.PartitionShape
 import CongruenceTheoryHigherOrder.MacroMicroShape
 import CongruenceTheoryHigherOrder.ShapeCpSplit
+import CongruenceTheoryHigherOrder.A2aLogFactorialBound
+import CongruenceTheoryHigherOrder.A2aValuationBound
