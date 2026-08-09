@@ -38,22 +38,46 @@ mechanism (A4, `genGfun_eq_prod_K`) — each independently `#print axioms`
 checked to depend only on Lean/Mathlib's standard axioms
 (`propext`, `Classical.choice`, `Quot.sound`).
 
+**External review of an earlier version of this README caught a genuine,
+previously undocumented gap**, since closed: the non-cut-vertex case of
+(A2a) obtained the cardinality bound `|A|≤R_u∏_{i≠u}(R_i-1)!`
+(`card_le_root_bound`, `A2aRootBound.lean`) and inferred the valuation bound
+`v_p(|A|)≤1+Σv_p((R_i-1)!)` from it via "since `v_p(R_u)≤1+v_p((R_u-1)!)`" —
+an invalid step, since `a≤b` does not imply `v_p(a)≤v_p(b)` in general
+(`8<10` but `v_2(8)=3>1=v_2(10)`). This is now fully closed:
+`card_le_root_bound_valuation` (`A2aValuationBound.lean`) proves the actual
+valuation-level statement via a genuine orbit-stabilizer argument — the
+orbit of the root incidence satisfies only `p^k≤R_u`, not a divisibility
+relation to `R_u`, supporting the weaker (but sufficient) bound
+`v_p(orbit)≤⌊log_pR_u⌋≤1+v_p((R_u-1)!)` (`A2aLogFactorialBound.lean`); the
+stabilizer term is bounded via genuine group-theoretic divisibility
+(`card_dvd_prod_factorial_mul_card_fixBlocks`, `key_induction_dvd`,
+`key_induction_rooted_dvd` — divisibility upgrades of the existing
+cardinality-only machinery, which already contained an exact
+`|A|=|range|·|ker|` factorization via the first isomorphism theorem, just
+not previously exposed as a divisibility fact). All five new theorems are
+independently `#print axioms`-checked to depend only on
+`propext`/`Classical.choice`/`Quot.sound`, zero `sorry`.
+
 **Two gaps remain open, and `thm:atomic-connected-content` as a whole is not
 closed:**
-1. The formalized (A2a) bound groups branches by two numeric invariants
-   (attachment count and block size) as a proxy for the paper's
-   rooted-isomorphism type. This proxy is necessary but not sufficient, so
-   the formalized bound can, in principle, be looser than the paper's exact
-   claim whenever two non-isomorphic branches happen to share both
-   invariants.
+1. The cut-vertex case of (A2a) has both of its own open issues: the same
+   kind of cardinality-to-valuation gap just closed for the non-cut-vertex
+   case (not yet attempted here), and separately, its formalized bound
+   groups branches by two numeric invariants (attachment count and block
+   size) as a proxy for the paper's rooted-isomorphism type. This proxy is
+   necessary but not sufficient, so the formalized bound can, in principle,
+   be looser than the paper's exact claim whenever two non-isomorphic
+   branches happen to share both invariants.
 2. A point-level hypothesis used in the paper's proof (that the relevant
-   mixed points, not just blocks, are connected — `hmixed`) has not yet been
-   derived from the block-level connectivity that is available.
+   mixed points, not just blocks, are connected — `hmixed`, used in both the
+   cut-vertex and non-cut-vertex cases) has not yet been derived from the
+   block-level connectivity that is available.
 
 Consequently `thm:complete-prime-local` and everything built on it
 (including the scope-completeness theorem in Part I's companion conclusion)
-are correspondingly unverified by machine, pending closure of these two
-gaps.
+are correspondingly unverified by machine, pending closure of these
+remaining gaps.
 
 
 ## File-by-file breakdown and progress notes
