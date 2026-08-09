@@ -62,47 +62,6 @@ The bullets below are per-file; the longer discussion afterward walks
 through the connected-cumulant chapter's progress in more narrative detail,
 preserved from the formalization's own working notes.
 
-- **`CongruenceTheoryHigherOrder/PrimeWitness.lean`** — **`prop:prime-witness`,
-  complete**: the matching sharp *upper* bound. Generalizes
-  `ContentBounds.lean`'s single-`2`-cycle coefficient-extraction argument
-  to a single-`2p`-cycle (`coeff_defect_singleCycle`), reduces it via
-  Mathlib's `Nat.add_choose_eq` (Vandermonde's identity) to the
-  central-binomial sum `∑_{i=1}^{2p-1} C(n,i)C(k,2p-i)` the manuscript
-  itself uses, then proves this sum's `p`-adic valuation is exactly
-  `v_p(n)+v_p(k)-2` via **ultrametric dominance**
-  (`padicValNat_sum_eq_of_unique_min`, a new general-purpose lemma: one
-  term with strictly minimal valuation forces the whole sum's valuation).
-  The manuscript's own proof splits on `p` odd vs. `p=2` to bound the
-  central term's Kummer-carry count; this formalization avoids that split
-  entirely, via a cleaner argument: among the `p` consecutive integers
-  `n,…,n-p+1`, exactly one (`n` itself) is divisible by `p`, giving
-  `v_p(C(n,p))+1=v_p(n)` exactly (`padicValNat_choose_prime_self_add_one`),
-  while every non-central term is shown to have strictly larger valuation
-  via the *same* `Nat.factorization_le_factorization_choose_add` bound
-  `MixedSupportFactorial.lean` already used. **This completes
-  `thm:optimal-divisor` in full**: combined with
-  `optimal_divisor_lower_bound`, every coefficient of `CpermPair n k -
-  Cperm n · Cperm k` is divisible by `p^(v_p(n)+v_p(k)-1)` for every prime
-  `p`, and this is sharp — the `2p`-cycle coefficient witnesses equality
-  exactly, for every common prime `p ∣ gcd(n,k)`.
-- **`CongruenceTheoryHigherOrder/PrimeValue.lean`** — **`prop:prime`**, complete:
-  `AwPerm_prime_cong` proves `A_w(p) ≡ w_1 - w_p (mod p)` for every prime
-  `p`. A *different* orbit argument from `thm:strong`'s — this is
-  conjugation by the *full* symmetric group `S_p` on itself (not the
-  `H`-subgroup case `Conj.lean`/`Centralizer.lean` were built for), so it
-  goes straight to Mathlib's own `Equiv.Perm.card_isConj_mul_eq` (exact
-  class-size formula, `|class(g)| · z_λ = p!`) instead of custom
-  machinery. The real content is `not_dvd_centralizer_size`:
-  `z_λ = (p-|λ|)!·∏λ·∏(multiplicity!)` is `p`-free for every cycle type
-  other than the identity's and the single-`p`-cycle's, since a cycle type
-  summing to exactly the prime `p` with every part `<p` forces every
-  factor of `z_λ` to be a factorial/product of numbers `<p`. Combined with
-  `dvd_sum_of_const_on_classes` (`OrbitSum.lean`, reused unchanged) this
-  gives `Cperm p = X_1^p + (p-1)!·X_p + p·Q`; Fermat (`ZMod.pow_card`) and
-  Wilson (`ZMod.wilsons_lemma`) finish it off. Took the most iteration of
-  anything this round (working around several `omega`-can't-see-`hp.pos`
-  and cast-ambiguity traps), but every piece was validated standalone
-  before assembly, and nothing was left broken.
 - **`CongruenceTheoryHigherOrder/TreeModulus.lean`** — **`thm:tree-modulus`**
   ("Binary-decomposition divisibility"), the `r≥2` generalization of
   `thm:optimal-divisor` to tuples via labeled binary trees. `TreeFor ns` is

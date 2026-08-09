@@ -1,5 +1,3 @@
-import CongruenceTheoryHigherOrder.PrimeWitness
-import CongruenceTheoryHigherOrder.PrimeValue
 import CongruenceTheoryHigherOrder.TreeModulus
 import CongruenceTheoryHigherOrder.AllocationFormula
 import CongruenceTheoryHigherOrder.ConnectedCumulant
