@@ -116,3 +116,4 @@ import CongruenceTheoryHigherOrder.MicroblockPartition
 import CongruenceTheoryHigherOrder.MomentCumulantExpansion
 import CongruenceTheoryHigherOrder.Noncancellation
 import CongruenceTheoryHigherOrder.ProductValuation
+import CongruenceTheoryHigherOrder.DefectValuationLowerBound
