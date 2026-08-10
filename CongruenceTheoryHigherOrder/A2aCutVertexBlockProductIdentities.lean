@@ -55,6 +55,34 @@ theorem prod_ambientC0Attach_factorial_eq_pow {V : ι → Finset Ω} (g : Equiv.
     rw [this.1]
   rw [Finset.prod_congr rfl hconst, Finset.prod_const]
 
+/-- **Identity 2, additive form**: the sum of a fiber's attachment counts is `|fiber| * a_τ`. -/
+theorem sum_ambientC0Attach_eq_mul {V : ι → Finset Ω} (g : Equiv.Perm Ω) (u : ι)
+    (F : Finset (BlockComponent V g u)) (τ : ℕ × ℕ) (hF : ∀ c ∈ F, compType g u c = τ) :
+    ∑ c ∈ F, (AmbientC0Attach g u c).card = F.card * τ.1 := by
+  have hconst : ∀ c ∈ F, (AmbientC0Attach g u c).card = τ.1 := by
+    intro c hc
+    have := hF c hc
+    unfold compType at this
+    rw [Prod.mk.injEq] at this
+    exact this.1
+  rw [Finset.sum_congr rfl hconst, Finset.sum_const, smul_eq_mul]
+
+/-- **Identity 4**: `Finset.univ.erase c0`'s elements group exactly into `compType`-fibers, so
+summing (or, via `prod_ambientC0Attach_factorial_eq_pow`, taking products) fiberwise recovers the
+sum (product) over the whole erased set. -/
+theorem sum_ambientC0Attach_eq_sum_fibers {V : ι → Finset Ω} (g : Equiv.Perm Ω) (u : ι)
+    (c0 : BlockComponent V g u) :
+    ∑ c ∈ Finset.univ.erase c0, (AmbientC0Attach g u c).card =
+      ∑ τ ∈ (Finset.univ.erase c0).image (compType g u),
+        ((Finset.univ.erase c0).filter (fun c => compType g u c = τ)).card * τ.1 := by
+  rw [← Finset.sum_fiberwise_of_maps_to (t := (Finset.univ.erase c0).image (compType g u))
+    (g := compType g u) (fun c hc => Finset.mem_image_of_mem _ hc)
+    (fun c => (AmbientC0Attach g u c).card)]
+  apply Finset.sum_congr rfl
+  intro τ hτ
+  exact sum_ambientC0Attach_eq_mul g u ((Finset.univ.erase c0).filter (fun c => compType g u c = τ))
+    τ (fun c hc => (Finset.mem_filter.mp hc).2)
+
 /-- **Identity 3**: the raw block product over *all* non-root blocks equals the product of `C0`'s
 own island contribution together with every other component's, grouped by `compType`-fiber. Proved
 via `Finset.prod_fiberwise` on the quotient map `Quot.mk (BlockReach V g u)`, which — because
