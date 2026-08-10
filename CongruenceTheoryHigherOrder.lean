@@ -110,3 +110,4 @@ import CongruenceTheoryHigherOrder.KWeightedHomogeneous
 import CongruenceTheoryHigherOrder.SpecializationVars
 import CongruenceTheoryHigherOrder.SpecializationUnitCoeff
 import CongruenceTheoryHigherOrder.SpecializationCoefficient
+import CongruenceTheoryHigherOrder.TriangularAssembly
