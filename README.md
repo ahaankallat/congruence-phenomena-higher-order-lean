@@ -59,20 +59,16 @@ not previously exposed as a divisibility fact). All five new theorems are
 independently `#print axioms`-checked to depend only on
 `propext`/`Classical.choice`/`Quot.sound`, zero `sorry`.
 
-**One gap remains open, and `thm:atomic-connected-content` as a whole is not
-closed:** the cut-vertex case of (A2a) has both the same kind of
-cardinality-to-valuation gap just closed for the non-cut-vertex case and,
-separately, its formalized bound groups branches by two numeric invariants
-(attachment count and block size) as a proxy for the paper's
-rooted-isomorphism type. This proxy is necessary but not sufficient, so the
-formalized bound can, in principle, be looser than the paper's exact claim
-whenever two non-isomorphic branches happen to share both invariants.
-
-**Substantial progress on the valuation half — all four pieces the outer
-bound needs are now individually proved:**
+**The cut-vertex valuation gap is now fully closed.** One gap remains for
+`thm:atomic-connected-content` as a whole (see below), but it is no longer
+the valuation step: `A2aCutVertexFullValuation.lean`'s
+`factorization_card_le_cutVertex_full_bound` gives the complete
+valuation-level cut-vertex bound for (A2a), zero `sorry`, standard axioms
+only. It was assembled from five pieces, each independently proved and
+`#print axioms`-checked:
 
 1. `A2aCutVertexC0Valuation.lean`: `factorization_card_le_cutVertex_c0_bound`
-   closes the valuation gap for the distinguished-component (`C0`) branch,
+   closes the distinguished-component (`C0`) branch,
    `v_p(|A|) ≤ 1+v_p((a_0-1)!)+Σ_{i∈c0}v_p((R_i-1)!)+v_p(|ker(islandHom)|)`,
    via exact orbit-stabilizer factorization, the log-factorial lemma for
    the one genuinely value-only step, and genuine Lagrange-style
@@ -109,14 +105,20 @@ bound needs are now individually proved:**
    `card_dvd_island_tight_bound` across the fiber via pure divisibility,
    using a new `FixIslands` subgroup (mirroring the existing `FixBlocks`
    pattern) to track what's left.
+5. `A2aCutVertexFiberBound.lean` (`card_dvd_fiber_bound`) chains 2–4 into
+   one per-`compType`-fiber divisibility bound, and
+   `A2aCutVertexOuterFiberInduction.lean` (`key_induction_fiber_dvd`) then
+   chains *that* across every fiber of an invariant pool of components —
+   peeling one full `compType`-fiber at a time, never reopening
+   component-level arithmetic, so no per-step approximation is possible.
+   `A2aCutVertexFullValuation.lean` combines this (run over
+   `Finset.univ.erase c0`) with piece 1: `kerAmbient_mapsTo_compl_c0`
+   shows the `C0`-step's leftover kernel maps that pool to itself (fixing
+   `c0` pointwise forces, by injectivity, never sending anything else onto
+   it), and the induction's own leftover term closes to `Nat.card = 1` via
+   the existing base-case fact `card_le_one_of_fixes_all_blocks` — the
+   same triviality argument the cardinality-level machinery already used.
 
-All new theorems zero `sorry`, standard axioms only
-(`[propext, Classical.choice, Quot.sound]`), verified via `#print axioms`.
-
-**What remains to assemble the full outer bound**: chain these four
-per-fiber pieces into one theorem, then iterate across every `compType` in
-`compTypeSet`, then combine with the `C0` branch into the final
-valuation-level cut-vertex bound — wiring, not new mathematics.
 `DisjointTupleSymmetry.lean`'s `factorial_dvd_card_disjointTuple` (an
 independent, self-contained proof of the `m_τ!` divisibility principle) is
 superseded for this purpose by `fiberHom`'s direct construction, but is
@@ -142,8 +144,11 @@ its own theorem, `hconn_witness_transfers`, using the file's `IsPartition`
 hypothesis to get block disjointness. Zero `sorry`, standard axioms only.
 
 Consequently `thm:atomic-connected-content`'s fully general statement, for
-arbitrary block size `q`, is not yet closed by machine, but only for the
-one remaining cut-vertex reason above.
+arbitrary block size `q`, is not yet closed by machine, but the *only*
+remaining reason is the rooted-isomorphism-type classification issue
+(`compType` is a necessary-but-not-sufficient proxy) — every other gap
+this theorem's proof once had, including the full cut-vertex valuation
+step, is now closed.
 
 **This does not, however, block `thm:complete-prime-local` or the
 scope-completeness corollary.** Tracing the manuscript's own proofs shows
