@@ -74,10 +74,29 @@ closed:**
    cut-vertex and non-cut-vertex cases) has not yet been derived from the
    block-level connectivity that is available.
 
-Consequently `thm:complete-prime-local` and everything built on it
-(including the scope-completeness theorem in Part I's companion conclusion)
-are correspondingly unverified by machine, pending closure of these
-remaining gaps.
+Consequently `thm:atomic-connected-content`'s fully general statement, for
+arbitrary block size `q`, is not yet closed by machine.
+
+**This does not, however, block `thm:complete-prime-local` or the
+scope-completeness corollary.** Tracing the manuscript's own proofs shows
+neither actually depends on the general statement: both use only its
+single-prime specialization (the "first prime layer" step), whose two
+ingredients are each already, separately, proved here with zero `sorry`,
+depending only on standard axioms: the semiregular wreath-product bound for
+arbitrary `r,q` (`coeff_K_dvd`, `InequalityA1.lean`) and the coefficient
+identity together with Legendre's formula
+(`A3_coeff_eq_factorial`/`factorization_factorial_mul_sub_one`,
+`A3Final.lean`/`LegendreA3.lean`). Combining these two facts into the single
+valuation statement `v_p(cont K_j(p))=e_p(j)` that
+`thm:common-prime-classification` needs is elementary (the coefficient
+identity gives an upper bound on the content's valuation via Legendre's
+formula, the wreath-product bound gives a matching lower bound directly)
+but has not yet been assembled as its own theorem here — unlike the
+cut-vertex and `hmixed` gaps, this is a mechanical gap, not an open
+mathematical question. The repeated-block, triple, and other structurally
+distinguished closed-form theorems use their own direct arguments, whose
+dependence on the general statement of `thm:atomic-connected-content` was
+not separately re-examined here.
 
 
 ## File-by-file breakdown and progress notes
