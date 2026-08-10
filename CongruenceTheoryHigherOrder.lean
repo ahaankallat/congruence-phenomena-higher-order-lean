@@ -108,3 +108,4 @@ import CongruenceTheoryHigherOrder.FirstPrimeLayer
 import CongruenceTheoryHigherOrder.TriangularIndependence
 import CongruenceTheoryHigherOrder.KWeightedHomogeneous
 import CongruenceTheoryHigherOrder.SpecializationVars
+import CongruenceTheoryHigherOrder.SpecializationUnitCoeff
