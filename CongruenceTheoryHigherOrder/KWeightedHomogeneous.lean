@@ -66,4 +66,32 @@ theorem isWeightedHomogeneous_K (r q : ℕ) :
 
 #print axioms isWeightedHomogeneous_K
 
+/-- **Variable `0` never occurs in `K_r(q)`**: `ci g`'s exponent vanishes at index `0`, since it
+is built from index-`1` fixed points and cycle lengths `\ge2` only. Weighting index `0` by `1` and
+everything else by `0` makes this a second weighted-homogeneity fact, of degree `0`. -/
+theorem isWeightedHomogeneous_ci_zero {α : Type*} [Fintype α] [DecidableEq α]
+    (g : Equiv.Perm α) :
+    IsWeightedHomogeneous (fun k : ℕ => if k = 0 then (1 : ℕ) else 0) (ci g) 0 := by
+  rw [ci_eq_monomial_toFinsupp]
+  apply isWeightedHomogeneous_monomial
+  rw [map_add, Finsupp.weight_single, weight_toFinsupp]
+  simp only [if_neg (one_ne_zero), smul_eq_mul, mul_zero, zero_add]
+  have hmap : g.cycleType.map (fun k : ℕ => if k = 0 then (1 : ℕ) else 0) =
+      Multiset.replicate (Multiset.card g.cycleType) 0 := by
+    rw [← Multiset.map_const' g.cycleType (0 : ℕ)]
+    apply Multiset.map_congr rfl
+    intro x hx
+    have := Equiv.Perm.two_le_of_mem_cycleType hx
+    rw [if_neg (by omega)]
+  rw [hmap, Multiset.sum_replicate, smul_zero]
+
+/-- **`K_r(q)`'s coefficient support never touches variable `0`.** -/
+theorem isWeightedHomogeneous_K_zero (r q : ℕ) :
+    IsWeightedHomogeneous (fun k : ℕ => if k = 0 then (1 : ℕ) else 0) (K r q) 0 := by
+  rw [K_eq_Gfun_top]
+  unfold Gfun
+  apply IsWeightedHomogeneous.sum
+  intro g _
+  exact isWeightedHomogeneous_ci_zero g
+
 end CongruenceTheory
