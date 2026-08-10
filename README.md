@@ -59,23 +59,35 @@ not previously exposed as a divisibility fact). All five new theorems are
 independently `#print axioms`-checked to depend only on
 `propext`/`Classical.choice`/`Quot.sound`, zero `sorry`.
 
-**Two gaps remain open, and `thm:atomic-connected-content` as a whole is not
-closed:**
-1. The cut-vertex case of (A2a) has both of its own open issues: the same
-   kind of cardinality-to-valuation gap just closed for the non-cut-vertex
-   case (not yet attempted here), and separately, its formalized bound
-   groups branches by two numeric invariants (attachment count and block
-   size) as a proxy for the paper's rooted-isomorphism type. This proxy is
-   necessary but not sufficient, so the formalized bound can, in principle,
-   be looser than the paper's exact claim whenever two non-isomorphic
-   branches happen to share both invariants.
-2. A point-level hypothesis used in the paper's proof (that the relevant
-   mixed points, not just blocks, are connected — `hmixed`, used in both the
-   cut-vertex and non-cut-vertex cases) has not yet been derived from the
-   block-level connectivity that is available.
+**One gap remains open, and `thm:atomic-connected-content` as a whole is not
+closed:** the cut-vertex case of (A2a) has both the same kind of
+cardinality-to-valuation gap just closed for the non-cut-vertex case (not
+yet attempted here) and, separately, its formalized bound groups branches
+by two numeric invariants (attachment count and block size) as a proxy for
+the paper's rooted-isomorphism type. This proxy is necessary but not
+sufficient, so the formalized bound can, in principle, be looser than the
+paper's exact claim whenever two non-isomorphic branches happen to share
+both invariants.
+
+**A second gap, previously listed here, is now resolved:** the point-level
+hypothesis `hmixed` (that the relevant mixed points, not just blocks, are
+connected — used in both the cut-vertex and non-cut-vertex cases) does not
+in fact need deriving from block-level connectivity at all. Tracing the
+manuscript's only actual use of (A2a) shows it is never applied to the
+original blocks directly, only to each block restricted to its own mixed
+points. For that restriction, `hmixed` holds automatically: if `y`
+witnesses that a point is mixed relative to the original block, the same
+`y` (being outside a superset) is automatically outside the smaller
+restricted block too. `HmixedResolution.lean` proves this
+(`mixed_restricted_still_mixed`, `hmixed_of_restriction`), along with the
+companion fact that the block-support hypergraph — and hence the
+connectivity hypothesis (A2a) also needs — is unchanged by the same
+restriction, since a cycle only ever contributed an edge to that hypergraph
+when it was already mixed. Zero `sorry`, standard axioms only.
 
 Consequently `thm:atomic-connected-content`'s fully general statement, for
-arbitrary block size `q`, is not yet closed by machine.
+arbitrary block size `q`, is not yet closed by machine, but only for the
+one remaining cut-vertex reason above.
 
 **This does not, however, block `thm:complete-prime-local` or the
 scope-completeness corollary.** Tracing the manuscript's own proofs shows
@@ -92,11 +104,11 @@ valuation statement `v_p(cont K_j(p))=e_p(j)` that
 identity gives an upper bound on the content's valuation via Legendre's
 formula, the wreath-product bound gives a matching lower bound directly)
 but has not yet been assembled as its own theorem here — unlike the
-cut-vertex and `hmixed` gaps, this is a mechanical gap, not an open
-mathematical question. The repeated-block, triple, and other structurally
-distinguished closed-form theorems use their own direct arguments, whose
-dependence on the general statement of `thm:atomic-connected-content` was
-not separately re-examined here.
+cut-vertex gap, this is a mechanical gap, not an open mathematical
+question. The repeated-block, triple, and other structurally distinguished
+closed-form theorems use their own direct arguments, whose dependence on
+the general statement of `thm:atomic-connected-content` was not separately
+re-examined here.
 
 
 ## File-by-file breakdown and progress notes

@@ -91,3 +91,4 @@ import CongruenceTheoryHigherOrder.MacroMicroShape
 import CongruenceTheoryHigherOrder.ShapeCpSplit
 import CongruenceTheoryHigherOrder.A2aLogFactorialBound
 import CongruenceTheoryHigherOrder.A2aValuationBound
+import CongruenceTheoryHigherOrder.HmixedResolution
