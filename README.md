@@ -1,6 +1,6 @@
 # A General Theory of Congruence Phenomena, Part II — Lean
 
-A Lean 4 / Mathlib formalization of `A_General_Theory_of_Congruence_Phenomena_II.tex`
+A Lean 4 / Mathlib formalization of `Congruence_Phenomena_in_Exponential_Generating_Functions_II_Connected_Cumulants_and_Prime-Local_Higher-Order_Defects.tex`
 ("Connected Cumulants and the Complete Prime-Local Classification of
 Higher-Order Defects"), Part II of a two-part manuscript. Depends on
 [`congruence-phenomena-lean`](https://github.com/ahaankallat/congruence-phenomena-lean)
@@ -144,11 +144,19 @@ its own theorem, `hconn_witness_transfers`, using the file's `IsPartition`
 hypothesis to get block disjointness. Zero `sorry`, standard axioms only.
 
 Consequently `thm:atomic-connected-content`'s fully general statement, for
-arbitrary block size `q`, is not yet closed by machine, but the *only*
-remaining reason is the rooted-isomorphism-type classification issue
-(`compType` is a necessary-but-not-sufficient proxy) — every other gap
-this theorem's proof once had, including the full cut-vertex valuation
-step, is now closed.
+arbitrary block size `q`, is not yet assembled by machine into a single
+end-to-end theorem, though the cut-vertex valuation step itself is now
+fully closed (see above). An earlier version of this note flagged the
+rooted-isomorphism-type classification (`compType` being only a
+necessary-but-not-sufficient proxy for it) as the one remaining obstacle
+to matching the manuscript's cut-vertex claim exactly. That concern no
+longer applies: the manuscript's own cut-vertex proof was revised to group
+components by the `compType` numeric invariants directly, rather than by a
+finer rooted-isomorphism type that `compType` only approximated, so the
+Lean-proved bound and the manuscript's current claim are now stated over
+the same classes. What remains is assembling the already-proved pieces
+into a single theorem, together with the still-open parts of (A5) and
+(A6) documented in "Remaining scope" below.
 
 **This does not, however, block `thm:complete-prime-local` or the
 scope-completeness corollary.** Tracing the manuscript's own proofs shows
@@ -620,11 +628,17 @@ preserved from the formalization's own working notes.
   standard. **Honest scope note**: this closes exactly `hreach_all`, and `A2aHconnFromReachable.lean`
   above closes `hconn` — together, both of `key_induction`'s and `card_le_cutVertex_full_bound''`'s
   named connectivity-flavored hypotheses that *are* pure block-level connectivity facts are now
-  derived from ordinary graph connectivity. `hmixed` (`∀p∈V u,∃y∉V u,g.SameCycle p y`) remains
-  open: unlike `hconn`/`hreach_all`, it is a *point*-level claim (every individual point of `V u`
-  reaches outside), not implied by block-level connectivity alone (some points of `V u` could in
-  principle have their whole cycle confined to `V u` even while other points of `V u` connect
-  outward) — not attempted here.
+  derived from ordinary graph connectivity. `hmixed` (`∀p∈V u,∃y∉V u,g.SameCycle p y`) is, in
+  general, a genuine *point*-level claim (every individual point of `V u` reaches outside), not
+  implied by block-level connectivity alone (some points of `V u` could in principle have their
+  whole cycle confined to `V u` even while other points of `V u` connect outward). **Update**: this
+  is resolved, not open, because of how (A2a) is actually invoked. Tracing the manuscript's only
+  use of (A2a) shows it is applied to each block restricted to its own mixed points, and for that
+  restriction `hmixed` holds automatically, since a point surviving the restriction already had a
+  same-cycle witness outside the original block, hence outside the smaller restricted block too.
+  `HmixedResolution.lean`'s `mixed_restricted_still_mixed` and `hmixed_of_restriction` prove this,
+  with `hconn_witness_transfers` giving the matching transfer for `hconn`. See the discussion near
+  the top of this file.
 - **`CongruenceTheoryHigherOrder/A2aRootBound.lean`** — closes the gap left open above, giving
   **`card_le_root_bound`**, **fully proved**: the manuscript's exact literal bound
   `|A|≤R_u∏_{i≠u}(R_i-1)!` for (A2a)'s "`u` not a cut vertex" case. The fix is to never seed
@@ -768,6 +782,14 @@ preserved from the formalization's own working notes.
   attempted here. `hmixed`/`hreach_all` remain supplied as hypotheses rather than derived from the
   manuscript's own block-support-hypergraph connectivity assumption, the same translation gap noted
   for the non-cut-vertex case.
+
+  **Update**: this note describes the situation against an earlier version of the manuscript's
+  cut-vertex proof, which grouped by the finer rooted-isomorphism type and treated `compType` as
+  only a proxy for it. The manuscript's current proof groups by `compType`'s two numeric invariants
+  directly, with no finer type to approximate, so the "necessary but not sufficient" gap described
+  above no longer applies to matching the manuscript's current claim. `hmixed` is also resolved, not
+  open, by `HmixedResolution.lean` (see the discussion near the top of this file). See the updated
+  summary near the top of this file and "Remaining scope" below.
 - **`CongruenceTheoryHigherOrder/FreeActionDivides.lean`** — **`card_dvd_of_free`**, **fully proved**: a
   general, reusable fact extracted while investigating the cut-vertex case's multinomial
   divisibility above — if a finite group `G` acts on a finite type `X` *freely*
@@ -1239,10 +1261,17 @@ manuscript's statement) are all done.
   generality would need a true rooted-tree/hypergraph isomorphism classifier in place of the two
   numeric proxies — the arithmetic ingredients such a classifier's grouping would still need beyond
   that (the two valuation facts and the `m_τ!` divisibility) are already fully proved,
-  `A2aCutVertexValuation.lean`/`DisjointTupleSymmetry.lean`. Second, `hconn` and `hreach_all` are
+  `A2aCutVertexValuation.lean`/`DisjointTupleSymmetry.lean`. **Update**: the manuscript's current
+  proof groups by `compType`'s numeric invariants directly rather than by the finer
+  rooted-isomorphism type, so this first reason no longer applies to the manuscript's current claim
+  (see the updated summary near the top of this file). Second, `hconn` and `hreach_all` are
   now both derived from ordinary block-graph connectivity (`A2aHconnFromReachable.lean`,
-  `A2aHreachAll.lean`) rather than supplied as hypotheses; `hmixed` — a point-level claim, not
-  implied by block-level connectivity alone — remains open.
+  `A2aHreachAll.lean`) rather than supplied as hypotheses. `hmixed` is a point-level claim, not
+  implied by block-level connectivity alone, but is resolved rather than open, by
+  `HmixedResolution.lean` (see the discussion near the top of this file): the manuscript only ever
+  applies (A2a) to blocks already restricted to their own mixed points, and a point surviving that
+  restriction already has a same-cycle witness outside the original block, hence outside the
+  smaller restricted block too.
   **The manuscript's own sentence "the coefficient of `X_{jp}` in `K_j(p)` is `(jp-1)!`" — the
   first step of (A3)'s sharpness argument — is now fully proved verbatim**
   (`FullCycleConnected.lean`, `CiFullCycle.lean`, `CiConverse.lean`, `FullCycleCount.lean`,
