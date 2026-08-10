@@ -68,21 +68,49 @@ rooted-isomorphism type. This proxy is necessary but not sufficient, so the
 formalized bound can, in principle, be looser than the paper's exact claim
 whenever two non-isomorphic branches happen to share both invariants.
 
-**Partial progress on the valuation half:** `A2aCutVertexC0Valuation.lean`
-closes the valuation gap for the distinguished-component (`C0`) branch
-specifically — `factorization_card_le_cutVertex_c0_bound` gives
-`v_p(|A|) ≤ 1+v_p((a_0-1)!)+Σ_{i∈c0}v_p((R_i-1)!)+v_p(|ker(islandHom)|)`,
-by the same strategy as the non-cut-vertex upgrade (exact orbit-stabilizer
-factorization, the log-factorial lemma for the one genuinely value-only
-step, and genuine Lagrange-style divisibility, via a new
-`card_dvd_island_tight_bound`, for the rest). Zero `sorry`, standard axioms
-only. **What this does not yet close**: the recursive "outer induction"
-bounding `v_p(|ker(islandHom)|)` itself across the other
-rooted-isomorphism-type branches (the `m_τ!`/`classFactorialProd` part of
-the bound) has not been valuation-upgraded, and remains cardinality-only
-(`key_induction_cutVertex_components''`). `DisjointTupleSymmetry.lean`'s
-`factorial_dvd_card_disjointTuple` is a proved building block for the
-`m_τ!` divisor but is not yet wired into that induction.
+**Partial progress on the valuation half — three of the pieces the outer
+bound needs are now proved:**
+
+1. `A2aCutVertexC0Valuation.lean`: `factorization_card_le_cutVertex_c0_bound`
+   closes the valuation gap for the distinguished-component (`C0`) branch,
+   `v_p(|A|) ≤ 1+v_p((a_0-1)!)+Σ_{i∈c0}v_p((R_i-1)!)+v_p(|ker(islandHom)|)`,
+   via exact orbit-stabilizer factorization, the log-factorial lemma for
+   the one genuinely value-only step, and genuine Lagrange-style
+   divisibility (a new `card_dvd_island_tight_bound`) for the rest.
+2. `A2aCutVertexFiberPermHom.lean`: the `m_τ!` factor itself is now closed
+   by a genuinely different, tight argument, not the loose one iterative
+   orbit-peeling would give (bounding each peeled orbit by the shrinking
+   fiber and applying the log-factorial lemma at every step telescopes to
+   something strictly weaker than `v_p(m_τ!)`, the same
+   `≤`-does-not-imply-`v_p`-`≤` issue in a new guise). Instead,
+   `card_dvd_fiberHom_range_factorial` restricts the component-permutation
+   action to a single `compType`-fiber via a genuine `MonoidHom`
+   (`fiberHom`) and applies Lagrange once, directly:
+   `Nat.card(range) ∣ fiber.card!`, no induction, no telescoping.
+   `compType_fiber_invariant` proves every `φ ∈ A` preserves `compType`
+   (needed for `fiberHom` to be well-defined), by noting the existing
+   same-orbit invariance lemmas actually hold for *any* `φ`, not just
+   orbit witnesses.
+3. `A2aCutVertexComponentFixedValuation.lean`: the same `C0`-style
+   valuation bound, generalized from the distinguished component to *any*
+   single component a subgroup fixes setwise
+   (`factorization_card_le_component_fixed_bound`) — the situation each
+   component in a `compType`-fiber is in *after* `fiberHom`'s divisibility
+   step has already accounted for which branch goes where.
+
+All new theorems zero `sorry`, standard axioms only
+(`[propext, Classical.choice, Quot.sound]`).
+
+**What remains to assemble the full outer bound**: an induction chaining
+`factorization_card_le_component_fixed_bound` across every component of a
+`compType`-fiber one at a time (summing valuations additively, the
+analogue of `key_induction_dvd`'s peeling structure but at the
+factorization level), nested inside an outer iteration across every
+`compType` present. `DisjointTupleSymmetry.lean`'s
+`factorial_dvd_card_disjointTuple` (an independent, self-contained proof
+of the same `m_τ!` divisibility principle) is superseded for this purpose
+by `fiberHom`'s direct construction, but is left in place as a
+standalone fact.
 
 **A second gap, previously listed here, is now resolved:** the point-level
 hypothesis `hmixed` (that the relevant mixed points, not just blocks, are
