@@ -81,4 +81,61 @@ theorem prod_C_macroPartition_parts_eq (u : Fin r → ℕ) (hu : ∀ i, 0 < u i)
 #print axioms finpartition_top_parts_eq_singleton
 #print axioms prod_C_macroPartition_parts_eq
 
+/-- `GenFfun` (the filter-sum form) equals the block-product of `C`, bridging
+`GeneralizedConnectivity.lean`'s definition to `GeneralizedPartitionGluing.lean`'s
+`gen_sum_ci_respects_eq_prod_C`. -/
+theorem GenFfun_eq_prod_C {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} (τ : GenPartLat ι) :
+    GenFfun (q := q) τ = ∏ B ∈ τ.parts, C (B.card * q) := by
+  unfold GenFfun
+  rw [Finset.sum_subtype
+    (p := fun g : Equiv.Perm (ι × Fin q) => ∀ x : ι × Fin q, (g x).1 ∈ (τ.part x.1 : Finset ι))
+    _ (fun g => by simp) ci]
+  exact gen_sum_ci_respects_eq_prod_C τ
+
+/-- **(A7): the moment-cumulant expansion of the multiplicative defect `\Delta_{p\mathbf u}`.**
+For a genuinely heterogeneous tuple `u_1,\ldots,u_r`, the defect `C(pT)-\prod_iC(pu_i)`
+(`T=\sum u_i`) expands as a sum, over partitions of the `T` labelled `p`-microblocks not
+refining the macroblock partition, of the corresponding product of connected cumulants. -/
+theorem defect_eq_sum_prod_K {r : ℕ} (hr : 0 < r) (u : Fin r → ℕ) (hu : ∀ i, 0 < u i) (p : ℕ) :
+    C ((∑ i, u i) * p) - ∏ i, C (u i * p) =
+      ∑ π ∈ (Finset.univ : Finset (GenPartLat (MicroIdx u))).filter
+          (fun π => ¬ π ≤ macroPartition u),
+        ∏ B ∈ π.parts, K B.card p := by
+  have hne : (Finset.univ : Finset (MicroIdx u)).Nonempty := by
+    haveI : Nonempty (Fin r) := Fin.pos_iff_nonempty.mp hr
+    obtain ⟨i0⟩ := ‹Nonempty (Fin r)›
+    exact ⟨⟨i0, ⟨0, hu i0⟩⟩, Finset.mem_univ _⟩
+  have htopparts : (⊤ : GenPartLat (MicroIdx u)).parts = {Finset.univ} := by
+    apply Finset.Subset.antisymm (Finpartition.parts_top_subset _)
+    obtain ⟨x0, hx0⟩ := hne
+    have hmem : (⊤ : GenPartLat (MicroIdx u)).part x0 ∈ (⊤ : GenPartLat (MicroIdx u)).parts :=
+      (⊤ : GenPartLat (MicroIdx u)).part_mem.mpr hx0
+    have heq : (⊤ : GenPartLat (MicroIdx u)).part x0 = Finset.univ := by
+      have hsub := Finpartition.parts_top_subset (Finset.univ : Finset (MicroIdx u)) hmem
+      exact Finset.mem_singleton.mp hsub
+    rw [heq] at hmem
+    exact Finset.singleton_subset_iff.mpr hmem
+  have htop : C ((∑ i, u i) * p) = GenFfun (q := p) (⊤ : GenPartLat (MicroIdx u)) := by
+    rw [GenFfun_eq_prod_C, htopparts, Finset.prod_singleton]
+    congr 1
+    rw [Finset.card_univ, card_microIdx]
+  have hrho : ∏ i, C (u i * p) = GenFfun (q := p) (macroPartition u) := by
+    rw [prod_C_macroPartition_parts_eq u hu p, GenFfun_eq_prod_C]
+  rw [htop, hrho, GenFfun_eq_sum_GenGfun (⊤ : GenPartLat (MicroIdx u)),
+    GenFfun_eq_sum_GenGfun (macroPartition u), Finset.Iic_top]
+  have hsub : Finset.Iic (macroPartition u) ⊆ (Finset.univ : Finset (GenPartLat (MicroIdx u))) :=
+    Finset.subset_univ _
+  rw [← Finset.sum_sdiff_eq_sub hsub]
+  have hset : (Finset.univ : Finset (GenPartLat (MicroIdx u))) \ Finset.Iic (macroPartition u) =
+      (Finset.univ : Finset (GenPartLat (MicroIdx u))).filter
+        (fun π => ¬ π ≤ macroPartition u) := by
+    apply Finset.ext
+    intro π
+    rw [Finset.mem_sdiff, Finset.mem_filter, Finset.mem_Iic]
+  rw [hset]
+  exact Finset.sum_congr rfl (fun π _ => genGfun_eq_prod_K π)
+
+#print axioms GenFfun_eq_prod_C
+#print axioms defect_eq_sum_prod_K
+
 end CongruenceTheory
