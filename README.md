@@ -80,10 +80,13 @@ witnesses that a point is mixed relative to the original block, the same
 `y` (being outside a superset) is automatically outside the smaller
 restricted block too. `HmixedResolution.lean` proves this
 (`mixed_restricted_still_mixed`, `hmixed_of_restriction`), along with the
-companion fact that the block-support hypergraph — and hence the
-connectivity hypothesis (A2a) also needs — is unchanged by the same
-restriction, since a cycle only ever contributed an edge to that hypergraph
-when it was already mixed. Zero `sorry`, standard axioms only.
+companion fact the connectivity hypothesis (A2a) also needs: a cross-block
+`hconn`-style witness for the original blocks (`x ∈ V i`, `y ∈ V j`, `i ≠ j`,
+`g.SameCycle x y`) already witnesses the same fact for the mixed-point
+restrictions, since a cycle only ever contributed such a witness when it was
+already mixed, so it survives the restriction unchanged. This is proved as
+its own theorem, `hconn_witness_transfers`, using the file's `IsPartition`
+hypothesis to get block disjointness. Zero `sorry`, standard axioms only.
 
 Consequently `thm:atomic-connected-content`'s fully general statement, for
 arbitrary block size `q`, is not yet closed by machine, but only for the
