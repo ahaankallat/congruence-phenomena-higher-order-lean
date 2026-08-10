@@ -105,3 +105,4 @@ import CongruenceTheoryHigherOrder.A2aLogFactorialBound
 import CongruenceTheoryHigherOrder.A2aValuationBound
 import CongruenceTheoryHigherOrder.HmixedResolution
 import CongruenceTheoryHigherOrder.FirstPrimeLayer
+import CongruenceTheoryHigherOrder.TriangularIndependence
