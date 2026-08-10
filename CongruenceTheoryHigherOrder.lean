@@ -106,3 +106,4 @@ import CongruenceTheoryHigherOrder.A2aValuationBound
 import CongruenceTheoryHigherOrder.HmixedResolution
 import CongruenceTheoryHigherOrder.FirstPrimeLayer
 import CongruenceTheoryHigherOrder.TriangularIndependence
+import CongruenceTheoryHigherOrder.KWeightedHomogeneous
