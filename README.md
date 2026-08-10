@@ -61,13 +61,28 @@ independently `#print axioms`-checked to depend only on
 
 **One gap remains open, and `thm:atomic-connected-content` as a whole is not
 closed:** the cut-vertex case of (A2a) has both the same kind of
-cardinality-to-valuation gap just closed for the non-cut-vertex case (not
-yet attempted here) and, separately, its formalized bound groups branches
-by two numeric invariants (attachment count and block size) as a proxy for
-the paper's rooted-isomorphism type. This proxy is necessary but not
-sufficient, so the formalized bound can, in principle, be looser than the
-paper's exact claim whenever two non-isomorphic branches happen to share
-both invariants.
+cardinality-to-valuation gap just closed for the non-cut-vertex case and,
+separately, its formalized bound groups branches by two numeric invariants
+(attachment count and block size) as a proxy for the paper's
+rooted-isomorphism type. This proxy is necessary but not sufficient, so the
+formalized bound can, in principle, be looser than the paper's exact claim
+whenever two non-isomorphic branches happen to share both invariants.
+
+**Partial progress on the valuation half:** `A2aCutVertexC0Valuation.lean`
+closes the valuation gap for the distinguished-component (`C0`) branch
+specifically — `factorization_card_le_cutVertex_c0_bound` gives
+`v_p(|A|) ≤ 1+v_p((a_0-1)!)+Σ_{i∈c0}v_p((R_i-1)!)+v_p(|ker(islandHom)|)`,
+by the same strategy as the non-cut-vertex upgrade (exact orbit-stabilizer
+factorization, the log-factorial lemma for the one genuinely value-only
+step, and genuine Lagrange-style divisibility, via a new
+`card_dvd_island_tight_bound`, for the rest). Zero `sorry`, standard axioms
+only. **What this does not yet close**: the recursive "outer induction"
+bounding `v_p(|ker(islandHom)|)` itself across the other
+rooted-isomorphism-type branches (the `m_τ!`/`classFactorialProd` part of
+the bound) has not been valuation-upgraded, and remains cardinality-only
+(`key_induction_cutVertex_components''`). `DisjointTupleSymmetry.lean`'s
+`factorial_dvd_card_disjointTuple` is a proved building block for the
+`m_τ!` divisor but is not yet wired into that induction.
 
 **A second gap, previously listed here, is now resolved:** the point-level
 hypothesis `hmixed` (that the relevant mixed points, not just blocks, are
