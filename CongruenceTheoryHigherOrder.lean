@@ -118,3 +118,4 @@ import CongruenceTheoryHigherOrder.Noncancellation
 import CongruenceTheoryHigherOrder.ProductValuation
 import CongruenceTheoryHigherOrder.DefectValuationLowerBound
 import CongruenceTheoryHigherOrder.CoeffPowerCanonical
+import CongruenceTheoryHigherOrder.NormalizedLayerIdentity
