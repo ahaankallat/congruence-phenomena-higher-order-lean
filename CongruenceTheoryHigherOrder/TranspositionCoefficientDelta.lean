@@ -133,8 +133,128 @@ theorem coeff_single_one_Delta_eq_zero {r : ℕ} (n : Fin r → ℕ) :
   rw [← K_one, coeff_single_one_K_one, coeff_single_one_prod_C]
   ring
 
+/-- **The transposition target's value**, pointwise. -/
+theorem ciExp_two_apply (N j : ℕ) :
+    ciExp N ({2} : Multiset ℕ) j = (if j = 1 then N else 0) + (if j = 2 then 1 else 0) := by
+  rw [ciExp_apply]
+  congr 1
+  simp [Multiset.count_singleton]
+
+/-- **A monomial concentrated at position `1` is determined by its own weight.** -/
+theorem eq_single_one_of_weight_eq_of_forall_ne_one_eq_zero {d : ℕ →₀ ℕ} {w : ℕ}
+    (hw : Finsupp.weight (fun k : ℕ => k) d = w) (hd : ∀ k, k ≠ 1 → d k = 0) :
+    d = Finsupp.single 1 w := by
+  have hval : d 1 = w := by
+    rw [Finsupp.weight_apply, Finsupp.sum] at hw
+    simp only [smul_eq_mul] at hw
+    by_cases h1 : (1 : ℕ) ∈ d.support
+    · rw [show d.support = {1} from by
+        apply Finset.eq_singleton_iff_unique_mem.mpr
+        exact ⟨h1, fun k hk => by
+          by_contra hne
+          exact absurd (hd k hne) (Finsupp.mem_support_iff.mp hk)⟩] at hw
+      simpa using hw
+    · have hd10 : d 1 = 0 := Finsupp.notMem_support_iff.mp h1
+      have hall0 : ∀ k, d k = 0 := fun k => by
+        by_cases hk1 : k = 1
+        · rw [hk1]; exact hd10
+        · exact hd k hk1
+      have hw0 : w = 0 := by
+        have hz : d = 0 := Finsupp.ext hall0
+        rw [hz] at hw; simp at hw; omega
+      rw [hd10, hw0]
+  apply Finsupp.ext
+  intro k
+  by_cases hk : k = 1
+  · rw [hk, hval, Finsupp.single_eq_same]
+  · rw [hd k hk, Finsupp.single_apply, if_neg (Ne.symm hk)]
+
+/-- **`\text{nontrivialPartCount}\,d=0` forces `d` to vanish at every position `\ge2`.** -/
+theorem eq_zero_of_two_le_of_nontrivialPartCount_eq_zero {d : ℕ →₀ ℕ}
+    (hd : nontrivialPartCount d = 0) : ∀ k, 2 ≤ k → d k = 0 := by
+  intro k hk
+  rw [nontrivialPartCount_eq_sum, Finsupp.sum] at hd
+  by_contra hne
+  have hmem : k ∈ d.support := Finsupp.mem_support_iff.mpr hne
+  have := Finset.sum_eq_zero_iff.mp hd k hmem
+  rw [if_pos hk] at this
+  exact hne this
+
+/-- **The transposition-coefficient recursion**: peeling one block off via `Fin.cons`. -/
+theorem coeff_transposition_cons {t : ℕ} (a : ℕ) (m : Fin t → ℕ) (hB2 : 2 ≤ ∑ i, m i) :
+    coeff (ciExp ((a + ∑ i, m i) - 2) {2}) (Delta (Fin.cons a m : Fin (t + 1) → ℕ)) =
+      (a : ℤ) * (∑ i, m i : ℤ) + coeff (ciExp ((∑ i, m i) - 2) {2}) (Delta m) := by
+  set B := ∑ i, m i with hBdef
+  rw [Delta_cons_eq, ← hBdef, coeff_add]
+  have hterm1 : coeff (ciExp ((a + B) - 2) {2}) (C (a + B) - C a * C B) =
+      (a : ℤ) * (∑ i, (m i : ℤ)) := by
+    rw [coeff_defect_two_eq_mul a B, hBdef]
+    push_cast
+    ring
+  rw [hterm1]
+  congr 1
+  set x0 : ℕ →₀ ℕ := Finsupp.single 1 a with hx0
+  set y0 : ℕ →₀ ℕ := ciExp (B - 2) {2} with hy0
+  have hxy0 : x0 + y0 = ciExp (a + B - 2) {2} := by
+    apply Finsupp.ext
+    intro j
+    rw [Finsupp.add_apply, hx0, hy0, Finsupp.single_apply, ciExp_two_apply, ciExp_two_apply]
+    split_ifs <;> omega
+  rw [← hxy0]
+  have hforce : ∀ x y : ℕ →₀ ℕ, x + y = x0 + y0 → coeff x (C a) ≠ 0 →
+      coeff y (Delta m) ≠ 0 → x = x0 ∧ y = y0 := by
+    intro x y hxy hx hy
+    have hwx : Finsupp.weight (fun k : ℕ => k) x = a := isWeightedHomogeneous_C a hx
+    have hwy : Finsupp.weight (fun k : ℕ => k) y = B := isWeightedHomogeneous_Delta m hy
+    have hnp : nontrivialPartCount x + nontrivialPartCount y = 1 := by
+      rw [← nontrivialPartCount_add, hxy, hxy0]
+      exact nontrivialPartCount_ciExp (a + B - 2) {2}
+        (by intro z hz; simp at hz; omega)
+    have hsupp02 : ∀ k, k ≠ 1 → k ≠ 2 → x k = 0 ∧ y k = 0 := by
+      intro k hk1 hk2
+      have heq : (x + y) k = (x0 + y0) k := by rw [hxy]
+      rw [Finsupp.add_apply, hxy0, ciExp_two_apply, if_neg hk1, if_neg hk2, add_zero] at heq
+      omega
+    rcases (show nontrivialPartCount x = 0 ∧ nontrivialPartCount y = 1 ∨
+        nontrivialPartCount x = 1 ∧ nontrivialPartCount y = 0 from by omega) with
+      ⟨hx0c, hy1c⟩ | ⟨hx1c, hy0c⟩
+    · -- x achieves the trivial (all-fixed-points) piece; y must carry the transposition.
+      have hxall : ∀ k, k ≠ 1 → x k = 0 := by
+        intro k hk1
+        by_cases hk2 : k = 2
+        · subst hk2; exact eq_zero_of_two_le_of_nontrivialPartCount_eq_zero hx0c 2 le_rfl
+        · exact (hsupp02 k hk1 hk2).1
+      have hxeq : x = x0 := by
+        rw [hx0]; exact eq_single_one_of_weight_eq_of_forall_ne_one_eq_zero hwx hxall
+      have hyeq : y = y0 := by
+        have := hxy
+        rw [hxeq] at this
+        exact add_left_cancel this
+      exact ⟨hxeq, hyeq⟩
+    · -- x would carry the transposition itself; but then y is the all-fixed-points piece,
+      -- forcing y = single 1 B, contradicting Delta m's vanishing there.
+      exfalso
+      have hyall : ∀ k, k ≠ 1 → y k = 0 := by
+        intro k hk1
+        by_cases hk2 : k = 2
+        · subst hk2; exact eq_zero_of_two_le_of_nontrivialPartCount_eq_zero hy0c 2 le_rfl
+        · exact (hsupp02 k hk1 hk2).2
+      have hyeq : y = Finsupp.single 1 B :=
+        eq_single_one_of_weight_eq_of_forall_ne_one_eq_zero hwy hyall
+      rw [hyeq] at hy
+      exact hy (coeff_single_one_Delta_eq_zero m)
+  rw [coeff_mul_eq_of_forced_unique hforce]
+  have hcx0 : coeff x0 (C a) = 1 := by
+    rw [hx0, ← K_one]; exact coeff_single_one_K_one a
+  rw [hcx0]
+  ring
+
 #print axioms isWeightedHomogeneous_Delta
 #print axioms coeff_single_one_prod_C
 #print axioms coeff_single_one_Delta_eq_zero
+#print axioms ciExp_two_apply
+#print axioms eq_single_one_of_weight_eq_of_forall_ne_one_eq_zero
+#print axioms eq_zero_of_two_le_of_nontrivialPartCount_eq_zero
+#print axioms coeff_transposition_cons
 
 end CongruenceTheory
