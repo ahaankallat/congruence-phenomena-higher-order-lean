@@ -117,3 +117,4 @@ import CongruenceTheoryHigherOrder.MomentCumulantExpansion
 import CongruenceTheoryHigherOrder.Noncancellation
 import CongruenceTheoryHigherOrder.ProductValuation
 import CongruenceTheoryHigherOrder.DefectValuationLowerBound
+import CongruenceTheoryHigherOrder.CoeffPowerCanonical
