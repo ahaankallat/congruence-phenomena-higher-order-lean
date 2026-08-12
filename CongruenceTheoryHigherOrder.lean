@@ -170,3 +170,4 @@ import CongruenceTheoryHigherOrder.ShiftCongruenceQ1
 import CongruenceTheoryHigherOrder.ShiftCongruenceGeneralQ
 import CongruenceTheoryHigherOrder.PolyOrder
 import CongruenceTheoryHigherOrder.FmDef
+import CongruenceTheoryHigherOrder.FmModP
