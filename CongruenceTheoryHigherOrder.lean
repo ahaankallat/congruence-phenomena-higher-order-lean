@@ -195,3 +195,4 @@ import CongruenceTheoryHigherOrder.CpPowWitness
 import CongruenceTheoryHigherOrder.SubstMapBridge
 import CongruenceTheoryHigherOrder.BracketDcIdentity
 import CongruenceTheoryHigherOrder.DeltaOrderAssembly
+import CongruenceTheoryHigherOrder.CZeroFree
