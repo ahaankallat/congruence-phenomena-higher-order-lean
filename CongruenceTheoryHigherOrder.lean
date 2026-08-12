@@ -180,3 +180,4 @@ import CongruenceTheoryHigherOrder.LinPartPow
 import CongruenceTheoryHigherOrder.DcDegree1
 import CongruenceTheoryHigherOrder.DcOrderOneReverse
 import CongruenceTheoryHigherOrder.DcOrderOne
+import CongruenceTheoryHigherOrder.DcFrobenius
