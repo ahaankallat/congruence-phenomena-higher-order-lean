@@ -181,3 +181,4 @@ import CongruenceTheoryHigherOrder.DcDegree1
 import CongruenceTheoryHigherOrder.DcOrderOneReverse
 import CongruenceTheoryHigherOrder.DcOrderOne
 import CongruenceTheoryHigherOrder.DcFrobenius
+import CongruenceTheoryHigherOrder.DcPowOrder
