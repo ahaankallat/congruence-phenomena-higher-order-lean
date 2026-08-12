@@ -187,3 +187,4 @@ import CongruenceTheoryHigherOrder.DcOrderStep
 import CongruenceTheoryHigherOrder.DcResidualStep
 import CongruenceTheoryHigherOrder.DcOrderRecursion
 import CongruenceTheoryHigherOrder.WeightedSubst1
+import CongruenceTheoryHigherOrder.CShiftCongruence
