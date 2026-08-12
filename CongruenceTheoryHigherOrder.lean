@@ -198,3 +198,4 @@ import CongruenceTheoryHigherOrder.DeltaOrderAssembly
 import CongruenceTheoryHigherOrder.CZeroFree
 import CongruenceTheoryHigherOrder.DeltaZeroFree
 import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIIDepth
+import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIIDepthFull
