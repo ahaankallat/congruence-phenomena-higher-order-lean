@@ -173,3 +173,4 @@ import CongruenceTheoryHigherOrder.FmDef
 import CongruenceTheoryHigherOrder.FmModP
 import CongruenceTheoryHigherOrder.DcDef
 import CongruenceTheoryHigherOrder.LogTrunc
+import CongruenceTheoryHigherOrder.LinPart
