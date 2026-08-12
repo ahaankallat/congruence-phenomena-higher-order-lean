@@ -156,3 +156,4 @@ import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIFull
 import CongruenceTheoryHigherOrder.PrimeShiftCongruence
 import CongruenceTheoryHigherOrder.PUnitConjugacyClass
 import CongruenceTheoryHigherOrder.FloorSubadditivity
+import CongruenceTheoryHigherOrder.ProdCoeffSupport
