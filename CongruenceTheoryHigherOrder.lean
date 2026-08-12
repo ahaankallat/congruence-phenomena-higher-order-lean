@@ -172,3 +172,4 @@ import CongruenceTheoryHigherOrder.PolyOrder
 import CongruenceTheoryHigherOrder.FmDef
 import CongruenceTheoryHigherOrder.FmModP
 import CongruenceTheoryHigherOrder.DcDef
+import CongruenceTheoryHigherOrder.LogTrunc
