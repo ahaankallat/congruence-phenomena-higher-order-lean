@@ -197,3 +197,4 @@ import CongruenceTheoryHigherOrder.BracketDcIdentity
 import CongruenceTheoryHigherOrder.DeltaOrderAssembly
 import CongruenceTheoryHigherOrder.CZeroFree
 import CongruenceTheoryHigherOrder.DeltaZeroFree
+import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIIDepth
