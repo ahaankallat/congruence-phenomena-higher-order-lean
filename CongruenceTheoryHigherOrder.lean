@@ -185,3 +185,4 @@ import CongruenceTheoryHigherOrder.DcPowOrder
 import CongruenceTheoryHigherOrder.DigitDecomposition
 import CongruenceTheoryHigherOrder.DcOrderStep
 import CongruenceTheoryHigherOrder.DcResidualStep
+import CongruenceTheoryHigherOrder.DcOrderRecursion
