@@ -177,3 +177,4 @@ import CongruenceTheoryHigherOrder.LinPart
 import CongruenceTheoryHigherOrder.TriangularIndep
 import CongruenceTheoryHigherOrder.FmConstantTerm
 import CongruenceTheoryHigherOrder.LinPartPow
+import CongruenceTheoryHigherOrder.DcDegree1
