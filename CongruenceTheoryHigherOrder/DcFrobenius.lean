@@ -28,18 +28,27 @@ theorem FmZ_one (p : ℕ) : FmZ p 1 = 1 := by
   unfold FmZ
   rw [Fm_one, map_one]
 
-/-- **The product side of the Frobenius factorization.** -/
+/-- **The product side of the Frobenius factorization.** Only the digits `c_s` for `2\le s\le
+p-1` are constrained: `c_1` is irrelevant to `D_{\mathbf c}` since `F_1\equiv1`
+(`FmZ_one`). -/
 theorem prod_FmZ_pow_eq (p r : ℕ) (hr2 : 2 ≤ r) (hrp : r ≤ p - 1) (c c' : ℕ → ℕ)
-    (hc : ∀ s ∈ Finset.Icc 1 (p - 1), c s = p * c' s + (if s = r then 1 else 0)) :
+    (hc : ∀ s ∈ Finset.Icc 2 (p - 1), c s = p * c' s + (if s = r then 1 else 0)) :
     ∏ s ∈ Finset.Icc 1 (p - 1), FmZ p s ^ c s =
       FmZ p r * (∏ s ∈ Finset.Icc 1 (p - 1), FmZ p s ^ c' s) ^ p := by
   have hstep1 : ∀ s ∈ Finset.Icc 1 (p - 1),
       FmZ p s ^ c s = (FmZ p s ^ c' s) ^ p * (if s = r then FmZ p s else 1) := by
     intro s hs
-    rw [hc s hs, pow_add, pow_mul']
-    by_cases hsr : s = r
-    · rw [if_pos hsr, if_pos hsr, pow_one]
-    · rw [if_neg hsr, if_neg hsr, pow_zero]
+    by_cases hs1 : s = 1
+    · subst hs1
+      have hsr : (1 : ℕ) ≠ r := by omega
+      rw [FmZ_one, if_neg hsr]
+      simp
+    · have hs2 : 2 ≤ s := by
+        simp only [Finset.mem_Icc] at hs; omega
+      rw [hc s (Finset.mem_Icc.mpr ⟨hs2, (Finset.mem_Icc.mp hs).2⟩), pow_add, pow_mul']
+      by_cases hsr : s = r
+      · rw [if_pos hsr, if_pos hsr, pow_one]
+      · rw [if_neg hsr, if_neg hsr, pow_zero]
   rw [Finset.prod_congr rfl hstep1, Finset.prod_mul_distrib, Finset.prod_pow]
   have hindic : ∏ s ∈ Finset.Icc 1 (p - 1), (if s = r then FmZ p s else 1) = FmZ p r := by
     rw [Finset.prod_ite_eq' (Finset.Icc 1 (p - 1)) r (FmZ p)]
@@ -52,7 +61,7 @@ exactly as `F_r\cdot D_{\mathbf c'}^p`. -/
 theorem Dc_frobenius_factorization (p r h h' : ℕ) (hp : p.Prime) (c c' : ℕ → ℕ)
     (hr2 : 2 ≤ r) (hrp : r ≤ p - 1)
     (hh : h = p * h')
-    (hc : ∀ s ∈ Finset.Icc 1 (p - 1), c s = p * c' s + (if s = r then 1 else 0)) :
+    (hc : ∀ s ∈ Finset.Icc 2 (p - 1), c s = p * c' s + (if s = r then 1 else 0)) :
     Dc p r h c = FmZ p r * (Dc p 1 h' c') ^ p := by
   unfold Dc
   rw [hh, pow_mul', prod_FmZ_pow_eq p r hr2 hrp c c' hc]
