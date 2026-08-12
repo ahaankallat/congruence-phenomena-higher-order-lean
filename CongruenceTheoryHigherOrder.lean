@@ -190,3 +190,4 @@ import CongruenceTheoryHigherOrder.WeightedSubst1
 import CongruenceTheoryHigherOrder.CShiftCongruence
 import CongruenceTheoryHigherOrder.DeltaFactorization
 import CongruenceTheoryHigherOrder.FmZPrimeValue
+import CongruenceTheoryHigherOrder.WeightedOrder
