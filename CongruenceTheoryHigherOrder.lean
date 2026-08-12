@@ -192,3 +192,4 @@ import CongruenceTheoryHigherOrder.DeltaFactorization
 import CongruenceTheoryHigherOrder.FmZPrimeValue
 import CongruenceTheoryHigherOrder.WeightedOrder
 import CongruenceTheoryHigherOrder.CpPowWitness
+import CongruenceTheoryHigherOrder.SubstMapBridge

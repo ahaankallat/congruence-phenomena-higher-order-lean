@@ -63,6 +63,23 @@ theorem wDeg_nontrivialWeight_eq (d : ℕ →₀ ℕ) (hd0 : d 0 = 0) :
     · simp [hk1]]
   rw [hfiltereq]
 
+/-- **`\text{wDeg nontrivialWeight}\,e=\text{monoDeg}\,e`, given `e\,1=0`** — a cleaner, more
+directly usable fact than `wDeg_nontrivialWeight_eq` (no `e\,0=0` hypothesis needed): since
+`e\,1=0`, index `1` never contributes to either sum, so `\text{nontrivialWeight}` (which is `1`
+everywhere except index `1`) agrees with the all-ones weight on `e`'s entire support. -/
+theorem wDeg_nontrivialWeight_eq_monoDeg_of_apply_one_eq_zero (e : ℕ →₀ ℕ) (he1 : e 1 = 0) :
+    wDeg nontrivialWeight e = monoDeg e := by
+  rw [wDeg_eq_sum, monoDeg_eq_sum]
+  unfold Finsupp.sum
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hk1 : k ≠ 1 := by
+    intro hEq
+    subst hEq
+    rw [Finsupp.mem_support_iff] at hk
+    exact hk he1
+  simp only [nontrivialWeight, if_neg hk1, one_mul]
+
 /-- **`w`-order of `\varphi` is exactly `k`**: every nonzero-coefficient monomial has `w`-degree
 `\ge k`, and some nonzero-coefficient monomial has `w`-degree exactly `k`. -/
 def WOrder (w : ℕ → ℕ) (φ : MvPolynomial ℕ R) (k : ℕ) : Prop :=
@@ -164,6 +181,7 @@ theorem WOrder.mul_exact [NoZeroDivisors R] {w : ℕ → ℕ} {φ ψ : MvPolynom
 
 #print axioms wDeg_add
 #print axioms wDeg_nontrivialWeight_eq
+#print axioms wDeg_nontrivialWeight_eq_monoDeg_of_apply_one_eq_zero
 #print axioms WOrder.ne_zero
 #print axioms WOrder.mul_ge
 #print axioms WOrder.mul_exact
