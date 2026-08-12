@@ -23,9 +23,9 @@ namespace CongruenceTheory
 open MvPolynomial
 
 /-- **`\Delta_{\mathbf n}` has a coefficient not divisible by `p`** whenever `N=hp+s`
-(`h\ge1`, `2\le s<p`) and at least two indices have `p\nmid n_i`. -/
+(`2\le s<p`) and at least two indices have `p\nmid n_i`. -/
 theorem exists_coeff_not_dvd_of_no_carry {r : ℕ} (n : Fin r → ℕ) {p : ℕ} (hp : p.Prime)
-    {h s : ℕ} (hh1 : 1 ≤ h) (hs2 : 2 ≤ s) (hslt : s < p) (hN : (∑ i, n i) = h * p + s)
+    {h s : ℕ} (hs2 : 2 ≤ s) (hslt : s < p) (hN : (∑ i, n i) = h * p + s)
     (hU2 : ∃ i0 i1 : Fin r, i0 ≠ i1 ∧ ¬ p ∣ n i0 ∧ ¬ p ∣ n i1) :
     ∃ d, ¬ (p : ℤ) ∣ coeff d (Delta n) := by
   set N := ∑ i, n i with hNdef
@@ -63,7 +63,7 @@ theorem exists_coeff_not_dvd_of_no_carry {r : ℕ} (n : Fin r → ℕ) {p : ℕ}
   have hnotdvdcard : ¬ p ∣ (Finset.univ.filter (fun x : Equiv.Perm (Fin N) => x.cycleType =
       Multiset.replicate h p + {s})).card := by
     rw [hcardeq]
-    exact not_dvd_card_isConj_replicate_add_singleton_cycleType hp hh1 hs2 hslt hN hg
+    exact not_dvd_card_isConj_replicate_add_singleton_cycleType hp hs2 hslt hN hg
   have hprodcoeff : coeff d0 (∏ i, C (n i)) = 0 := by
     apply coeff_finset_prod_eq_zero_of_forall_ne
     rintro ⟨e, hemem, hesum⟩

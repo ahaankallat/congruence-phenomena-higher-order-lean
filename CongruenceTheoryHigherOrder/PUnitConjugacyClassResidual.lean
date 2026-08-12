@@ -31,41 +31,51 @@ theorem exists_perm_replicate_add_singleton_cycleType {N p h s : ℕ} (hp : p.Pr
     · rw [Multiset.eq_of_mem_replicate ha]; exact hp.two_le
     · rw [Multiset.mem_singleton.mp ha]; exact hs2
 
-/-- **The conjugacy class of a permutation of `Fin N` with `h\ge1` disjoint `p`-cycles plus one
+/-- **The conjugacy class of a permutation of `Fin N` with `h` disjoint `p`-cycles plus one
 `s`-cycle (`N=hp+s`, `2\le s<p`) has size coprime to `p`.** -/
 theorem not_dvd_card_isConj_replicate_add_singleton_cycleType {N p h s : ℕ} (hp : p.Prime)
-    (hh1 : 1 ≤ h) (hs2 : 2 ≤ s) (hslt : s < p) (hspN : N = h * p + s)
+    (hs2 : 2 ≤ s) (hslt : s < p) (hspN : N = h * p + s)
     {g : Equiv.Perm (Fin N)} (hg : g.cycleType = Multiset.replicate h p + {s}) :
     ¬ p ∣ Nat.card {x : Equiv.Perm (Fin N) | IsConj g x} := by
   haveI := Fact.mk hp
-  have hcentral : Nat.card (centralizer {g}) =
-      (Fintype.card (Fin N) - g.cycleType.sum)! * g.cycleType.prod *
-        (∏ n ∈ g.cycleType.toFinset, (g.cycleType.count n)!) :=
-    Equiv.Perm.nat_card_centralizer g
-  have hclasseq : Nat.card {x : Equiv.Perm (Fin N) | IsConj g x} *
+  have hclasseq0 : Nat.card {x : Equiv.Perm (Fin N) | IsConj g x} *
       ((Fintype.card (Fin N) - g.cycleType.sum)! * g.cycleType.prod *
         (∏ n ∈ g.cycleType.toFinset, (g.cycleType.count n)!)) = (Fintype.card (Fin N))! :=
     Equiv.Perm.card_isConj_mul_eq g
-  rw [hg] at hclasseq
+  rw [hg] at hclasseq0
   have hsum : (Multiset.replicate h p + ({s} : Multiset ℕ)).sum = h * p + s := by
     rw [Multiset.sum_add, Multiset.sum_replicate, smul_eq_mul, Multiset.sum_singleton]
   have hprod : (Multiset.replicate h p + ({s} : Multiset ℕ)).prod = p ^ h * s := by
     rw [Multiset.prod_add, Multiset.prod_replicate, Multiset.prod_singleton]
   have hpsne : p ≠ s := hslt.ne'
-  have htoFinset : (Multiset.replicate h p + ({s} : Multiset ℕ)).toFinset = {p, s} := by
-    rw [Multiset.toFinset_add, Multiset.toFinset_replicate, if_neg (by omega : h ≠ 0)]
-    simp
-  have hcountp : (Multiset.replicate h p + ({s} : Multiset ℕ)).count p = h := by
-    simp [Multiset.count_add, Multiset.count_replicate, Multiset.count_singleton, hpsne,
-      Ne.symm hpsne]
-  have hcounts : (Multiset.replicate h p + ({s} : Multiset ℕ)).count s = 1 := by
-    simp [Multiset.count_add, Multiset.count_replicate, Multiset.count_singleton, hpsne,
-      Ne.symm hpsne]
-  rw [Fintype.card_fin, hsum, hprod, htoFinset] at hclasseq
-  rw [Finset.prod_pair hpsne, hcountp, hcounts] at hclasseq
+  have hclasseq : Nat.card {x : Equiv.Perm (Fin N) | IsConj g x} *
+      ((Fintype.card (Fin N) - (h * p + s))! * (p ^ h * s) * Nat.factorial h) =
+      (Fintype.card (Fin N))! := by
+    rcases Nat.eq_zero_or_pos h with hh0 | hh1
+    · have htoFinset : (Multiset.replicate h p + ({s} : Multiset ℕ)).toFinset = {s} := by
+        rw [hh0]; simp
+      have hcounts : (Multiset.replicate h p + ({s} : Multiset ℕ)).count s = 1 := by
+        simp [hh0, Multiset.count_add, Multiset.count_replicate, Multiset.count_singleton]
+      rw [hsum, hprod, htoFinset] at hclasseq0
+      rw [Finset.prod_singleton, hcounts] at hclasseq0
+      rw [hh0] at hclasseq0 ⊢
+      simpa using hclasseq0
+    · have htoFinset : (Multiset.replicate h p + ({s} : Multiset ℕ)).toFinset = {p, s} := by
+        rw [Multiset.toFinset_add, Multiset.toFinset_replicate, if_neg (by omega : h ≠ 0)]
+        simp
+      have hcountp : (Multiset.replicate h p + ({s} : Multiset ℕ)).count p = h := by
+        simp [Multiset.count_add, Multiset.count_replicate, Multiset.count_singleton, hpsne,
+          Ne.symm hpsne]
+      have hcounts : (Multiset.replicate h p + ({s} : Multiset ℕ)).count s = 1 := by
+        simp [Multiset.count_add, Multiset.count_replicate, Multiset.count_singleton, hpsne,
+          Ne.symm hpsne]
+      rw [hsum, hprod, htoFinset] at hclasseq0
+      rw [Finset.prod_pair hpsne, hcountp, hcounts] at hclasseq0
+      simpa using hclasseq0
+  rw [Fintype.card_fin] at hclasseq
   have hNs : N - (h * p + s) = 0 := by omega
   rw [hNs] at hclasseq
-  simp only [Nat.factorial_zero, one_mul, Nat.factorial_one, mul_one] at hclasseq
+  simp only [Nat.factorial_zero, one_mul] at hclasseq
   intro hpdvd
   obtain ⟨k, hk⟩ := hpdvd
   have hppowne : (p ^ h : ℕ) ≠ 0 := pow_ne_zero h hp.pos.ne'
