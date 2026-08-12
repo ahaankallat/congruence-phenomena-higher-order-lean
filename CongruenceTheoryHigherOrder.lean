@@ -184,3 +184,4 @@ import CongruenceTheoryHigherOrder.DcFrobenius
 import CongruenceTheoryHigherOrder.DcPowOrder
 import CongruenceTheoryHigherOrder.DigitDecomposition
 import CongruenceTheoryHigherOrder.DcOrderStep
+import CongruenceTheoryHigherOrder.DcResidualStep
