@@ -176,3 +176,4 @@ import CongruenceTheoryHigherOrder.LogTrunc
 import CongruenceTheoryHigherOrder.LinPart
 import CongruenceTheoryHigherOrder.TriangularIndep
 import CongruenceTheoryHigherOrder.FmConstantTerm
+import CongruenceTheoryHigherOrder.LinPartPow
