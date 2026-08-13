@@ -207,3 +207,4 @@ import CongruenceTheoryHigherOrder.A2FullBound
 import CongruenceTheoryHigherOrder.DeltaPermInvariance
 import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIDispatch
 import CongruenceTheoryHigherOrder.WreathFullProduct
+import CongruenceTheoryHigherOrder.WreathRootEmbedding
