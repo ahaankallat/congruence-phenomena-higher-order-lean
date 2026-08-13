@@ -204,3 +204,4 @@ import CongruenceTheoryHigherOrder.A2RestrictionHom
 import CongruenceTheoryHigherOrder.A2KernelEmbedding
 import CongruenceTheoryHigherOrder.A2MixedBlockStructure
 import CongruenceTheoryHigherOrder.A2FullBound
+import CongruenceTheoryHigherOrder.DeltaPermInvariance
