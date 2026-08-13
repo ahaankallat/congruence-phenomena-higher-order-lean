@@ -199,3 +199,4 @@ import CongruenceTheoryHigherOrder.CZeroFree
 import CongruenceTheoryHigherOrder.DeltaZeroFree
 import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIIDepth
 import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIIDepthFull
+import CongruenceTheoryHigherOrder.A2MixedPoints
