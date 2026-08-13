@@ -9,7 +9,7 @@ kernel of this restriction embeds in a product of symmetric groups on the *non*-
 while the image satisfies (A2a) on the mixed points alone. This file builds the "mixed points"
 notion itself and the basic facts a centralizing, block-permuting subgroup needs: mixedness is
 preserved (`isMixed_apply_of_commute_of_permBlocks`), and two points on the same `\sigma`-cycle
-are mixed together (`isMixed_of_sameCycle`).
+are mixed together (`isMixedPt_of_sameCycle`).
 -/
 
 namespace CongruenceTheory
@@ -20,12 +20,12 @@ variable {Ω ι : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι] [DecidableEq
 
 /-- **A point `x` is mixed** (relative to a block partition `V` and a permutation `\sigma`) if
 its own block contains it but its `\sigma`-cycle reaches a point outside that block. -/
-def IsMixed (V : ι → Finset Ω) (σ : Equiv.Perm Ω) (x : Ω) : Prop :=
+def IsMixedPt (V : ι → Finset Ω) (σ : Equiv.Perm Ω) (x : Ω) : Prop :=
   ∃ i, x ∈ V i ∧ ∃ y ∉ V i, σ.SameCycle x y
 
 /-- **Two points on the same `\sigma`-cycle are mixed together.** -/
-theorem isMixed_of_sameCycle {V : ι → Finset Ω} (hpart : IsPartition V) {σ : Equiv.Perm Ω}
-    {x y : Ω} (hsame : σ.SameCycle x y) (hx : IsMixed V σ x) : IsMixed V σ y := by
+theorem isMixedPt_of_sameCycle {V : ι → Finset Ω} (hpart : IsPartition V) {σ : Equiv.Perm Ω}
+    {x y : Ω} (hsame : σ.SameCycle x y) (hx : IsMixedPt V σ x) : IsMixedPt V σ y := by
   obtain ⟨i, hxi, z, hznoti, hxz⟩ := hx
   obtain ⟨j, hyj, -⟩ := hpart y
   by_cases hij : i = j
@@ -41,8 +41,8 @@ theorem isMixed_apply_of_commute_of_permBlocks {V : ι → Finset Ω} (hpart : I
     (hne : ∀ i, (V i).Nonempty) {A : Subgroup (Equiv.Perm Ω)}
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) {σ : Equiv.Perm Ω}
     (hcent : ∀ φ ∈ A, Commute φ σ)
-    {φ : Equiv.Perm Ω} (hφ : φ ∈ A) {x : Ω} (hx : IsMixed V σ x) :
-    IsMixed V σ (φ x) := by
+    {φ : Equiv.Perm Ω} (hφ : φ ∈ A) {x : Ω} (hx : IsMixedPt V σ x) :
+    IsMixedPt V σ (φ x) := by
   obtain ⟨i, hxi, y, hynoti, hsame⟩ := hx
   set π := blockPermOfMem hpart hne hperm φ hφ with hπdef
   refine ⟨π i, ?_, φ y, ?_, ?_⟩
@@ -61,7 +61,7 @@ theorem isMixed_apply_of_commute_of_permBlocks {V : ι → Finset Ω} (hpart : I
     rw [hn] at heq
     exact heq.symm
 
-#print axioms isMixed_of_sameCycle
+#print axioms isMixedPt_of_sameCycle
 #print axioms isMixed_apply_of_commute_of_permBlocks
 
 end CongruenceTheory

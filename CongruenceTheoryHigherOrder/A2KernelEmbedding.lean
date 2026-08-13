@@ -21,17 +21,17 @@ variable {Ω ι : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι] [DecidableEq
 open scoped Classical in
 /-- **The non-mixed points of block `i`.** -/
 noncomputable def NonMixed (V : ι → Finset Ω) (σ : Equiv.Perm Ω) (i : ι) : Finset Ω :=
-  (V i).filter (fun x => ¬ IsMixed V σ x)
+  (V i).filter (fun x => ¬ IsMixedPt V σ x)
 
 open scoped Classical in
 theorem mem_NonMixed {V : ι → Finset Ω} {σ : Equiv.Perm Ω} {i : ι} {x : Ω} :
-    x ∈ NonMixed V σ i ↔ x ∈ V i ∧ ¬ IsMixed V σ x := by
+    x ∈ NonMixed V σ i ↔ x ∈ V i ∧ ¬ IsMixedPt V σ x := by
   simp [NonMixed]
 
 /-- **Kernel elements fix every block setwise**, given a mixed witness point in each block. -/
 theorem image_eq_of_mem_ker (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixed V σ x)
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x)
     {φ : A} (hφ : φ ∈ MonoidHom.ker (restrictToMixed hpart hne hperm hcent)) (i : ι) :
     (V i).image (φ : Equiv.Perm Ω) = V i := by
   obtain ⟨x₀, hx₀mem, hx₀mixed⟩ := hMixedNe i
@@ -49,13 +49,13 @@ theorem image_eq_of_mem_ker (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty
 /-- **Kernel elements permute the non-mixed points of each block among themselves.** -/
 theorem restrict_iff (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixed V σ x)
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x)
     {φ : A} (hφ : φ ∈ MonoidHom.ker (restrictToMixed hpart hne hperm hcent)) (i : ι) (x : Ω) :
     (φ : Equiv.Perm Ω) x ∈ NonMixed V σ i ↔ x ∈ NonMixed V σ i := by
   rw [mem_NonMixed, mem_NonMixed]
   have hblock := image_eq_of_mem_ker hpart hne hperm hcent hMixedNe hφ i
-  have hmiff : IsMixed V σ ((φ : Equiv.Perm Ω) x) ↔ IsMixed V σ x :=
-    isMixed_apply_iff hpart hne hperm hcent (φ : Equiv.Perm Ω) φ.2 x
+  have hmiff : IsMixedPt V σ ((φ : Equiv.Perm Ω) x) ↔ IsMixedPt V σ x :=
+    isMixedPt_apply_iff hpart hne hperm hcent (φ : Equiv.Perm Ω) φ.2 x
   constructor
   · rintro ⟨h1, h2⟩
     obtain ⟨x', hx'mem, hx'eq⟩ := Finset.mem_image.mp (hblock ▸ h1)
@@ -67,7 +67,7 @@ theorem restrict_iff (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
 /-- **The kernel, acting on the non-mixed points of each block.** -/
 noncomputable def kernelToProd (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixed V σ x) :
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x) :
     ↥(MonoidHom.ker (restrictToMixed hpart hne hperm hcent)) →*
       ∀ i, Equiv.Perm ↥(NonMixed V σ i) where
   toFun φ := fun i => Equiv.Perm.subtypePerm (φ.1 : Equiv.Perm Ω)
@@ -80,7 +80,7 @@ noncomputable def kernelToProd (hpart : IsPartition V) (hne : ∀ i, (V i).Nonem
 
 theorem kernelToProd_injective (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixed V σ x) :
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x) :
     Function.Injective (kernelToProd hpart hne hperm hcent hMixedNe) := by
   rw [injective_iff_map_eq_one]
   intro φ hφ1
@@ -88,7 +88,7 @@ theorem kernelToProd_injective (hpart : IsPartition V) (hne : ∀ i, (V i).Nonem
   apply Equiv.ext
   intro x
   obtain ⟨i, hi, -⟩ := hpart x
-  by_cases hmx : IsMixed V σ x
+  by_cases hmx : IsMixedPt V σ x
   · exact (mem_ker_restrictToMixed hpart hne hperm hcent φ.1).mp φ.2 x hmx
   · have hxnm : x ∈ NonMixed V σ i := mem_NonMixed.mpr ⟨hi, hmx⟩
     have h := congrArg
@@ -99,7 +99,7 @@ theorem kernelToProd_injective (hpart : IsPartition V) (hne : ∀ i, (V i).Nonem
 /-- **(A2)'s kernel bound**: `|\ker(\mathrm{restrictToMixed})| \mid \prod_i (R_i - M_i)!`. -/
 theorem card_ker_dvd_prod_factorial (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixed V σ x) :
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x) :
     Nat.card (MonoidHom.ker (restrictToMixed hpart hne hperm hcent)) ∣
       ∏ i, Nat.factorial (NonMixed V σ i).card := by
   have hinj := kernelToProd_injective hpart hne hperm hcent hMixedNe

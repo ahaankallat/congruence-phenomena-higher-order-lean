@@ -5,7 +5,7 @@ import CongruenceTheoryHigherOrder.A2KernelEmbedding
 **`thm:atomic-connected-content`'s (A2): transferring the block structure to the mixed points.**
 `\sigma` preserves mixedness (a `\sigma`-cycle is uniformly mixed or non-mixed, since
 `\mathrm{SameCycle}` is an equivalence relation and `A2MixedPoints.lean`'s
-`isMixed_of_sameCycle` propagates mixedness both ways along it), so `\sigma` restricts to a
+`isMixedPt_of_sameCycle` propagates mixedness both ways along it), so `\sigma` restricts to a
 genuine permutation `sigmaMixed` of the mixed points. The block partition `V` likewise restricts
 to `MixedBlock`, and the range of `restrictToMixed` is block-permuting for `MixedBlock` and
 centralizes `sigmaMixed` — exactly the raw material `(A2a)`'s theorems
@@ -23,31 +23,31 @@ variable {Ω ι : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι] [DecidableEq
 
 /-- **`\sigma` preserves mixedness.** -/
 theorem isMixed_sigma_apply_iff (hpart : IsPartition V) (x : Ω) :
-    IsMixed V σ (σ x) ↔ IsMixed V σ x := by
+    IsMixedPt V σ (σ x) ↔ IsMixedPt V σ x := by
   constructor
   · intro h
-    exact isMixed_of_sameCycle hpart (⟨-1, by simp⟩ : σ.SameCycle (σ x) x) h
+    exact isMixedPt_of_sameCycle hpart (⟨-1, by simp⟩ : σ.SameCycle (σ x) x) h
   · intro h
-    exact isMixed_of_sameCycle hpart (⟨1, by simp⟩ : σ.SameCycle x (σ x)) h
+    exact isMixedPt_of_sameCycle hpart (⟨1, by simp⟩ : σ.SameCycle x (σ x)) h
 
 /-- **`\sigma` restricted to the mixed points.** -/
 noncomputable def sigmaMixed (hpart : IsPartition V) (σ : Equiv.Perm Ω) :
-    Equiv.Perm {x // IsMixed V σ x} :=
+    Equiv.Perm {x // IsMixedPt V σ x} :=
   Equiv.Perm.subtypePerm σ (isMixed_sigma_apply_iff hpart)
 
 @[simp]
-theorem sigmaMixed_apply (hpart : IsPartition V) (y : {x // IsMixed V σ x}) :
+theorem sigmaMixed_apply (hpart : IsPartition V) (y : {x // IsMixedPt V σ x}) :
     (sigmaMixed hpart σ y : Ω) = σ (y : Ω) := rfl
 
-noncomputable instance instFintypeMixed : Fintype {x // IsMixed V σ x} := Fintype.ofFinite _
+noncomputable instance instFintypeMixed : Fintype {x // IsMixedPt V σ x} := Fintype.ofFinite _
 
 /-- **The mixed points of block `i`.** -/
 noncomputable def MixedBlock (V : ι → Finset Ω) (σ : Equiv.Perm Ω) (i : ι) :
-    Finset {x // IsMixed V σ x} :=
+    Finset {x // IsMixedPt V σ x} :=
   Finset.univ.filter (fun y => y.1 ∈ V i)
 
 open scoped Classical in
-theorem mem_MixedBlock {i : ι} {y : {x // IsMixed V σ x}} :
+theorem mem_MixedBlock {i : ι} {y : {x // IsMixedPt V σ x}} :
     y ∈ MixedBlock V σ i ↔ y.1 ∈ V i := by simp [MixedBlock]
 
 theorem isPartition_MixedBlock (hpart : IsPartition V) : IsPartition (MixedBlock V σ) := by
@@ -70,9 +70,9 @@ theorem mixedBlock_image_of_range (hpart : IsPartition V) (hne : ∀ i, (V i).No
   · intro hy
     rw [← hij] at hy
     obtain ⟨w, hw, hweq⟩ := Finset.mem_image.mp hy
-    have hphiw : IsMixed V σ ((φ.1 : Equiv.Perm Ω) w) := by rw [hweq]; exact y.2
-    have hwmixed : IsMixed V σ w :=
-      (isMixed_apply_iff hpart hne hperm hcent φ.1 φ.2 w).mp hphiw
+    have hphiw : IsMixedPt V σ ((φ.1 : Equiv.Perm Ω) w) := by rw [hweq]; exact y.2
+    have hwmixed : IsMixedPt V σ w :=
+      (isMixedPt_apply_iff hpart hne hperm hcent φ.1 φ.2 w).mp hphiw
     exact ⟨⟨w, hwmixed⟩, hw, Subtype.ext (by rw [restrictToMixed_apply]; exact hweq)⟩
 
 /-- **The range subgroup is block-permuting on `MixedBlock`.** -/
@@ -91,7 +91,7 @@ theorem mixedBlock_hcent (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
       Commute φ' (sigmaMixed hpart σ) := by
   rintro φ' ⟨φ, rfl⟩
   have hc : (φ.1 : Equiv.Perm Ω) * σ = σ * (φ.1 : Equiv.Perm Ω) := hcent φ.1 φ.2
-  have h : ∀ y : {x // IsMixed V σ x},
+  have h : ∀ y : {x // IsMixedPt V σ x},
       (φ.1 : Equiv.Perm Ω) (σ (y : Ω)) = σ ((φ.1 : Equiv.Perm Ω) (y : Ω)) := fun y => by
     have hh := congrArg (fun e : Equiv.Perm Ω => e (y : Ω)) hc
     simpa [Equiv.Perm.mul_apply] using hh

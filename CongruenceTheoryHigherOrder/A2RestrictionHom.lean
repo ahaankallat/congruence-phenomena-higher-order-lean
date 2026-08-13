@@ -4,8 +4,8 @@ import CongruenceTheoryHigherOrder.A2MixedPoints
 /-!
 **`thm:atomic-connected-content`'s (A2): the restriction homomorphism.** Given a centralizing,
 block-permuting subgroup `A ≤ \operatorname{Perm}(\Omega)$ and `\sigma`, `A` acts on the set of
-mixed points (`A2MixedPoints.lean`'s `IsMixed`) via `subtypePerm`, giving a genuine `MonoidHom`
-`restrictToMixed : A →* \operatorname{Perm}\{x // \mathrm{IsMixed}\ V\ \sigma\ x\}$. The first
+mixed points (`A2MixedPoints.lean`'s `IsMixedPt`) via `subtypePerm`, giving a genuine `MonoidHom`
+`restrictToMixed : A →* \operatorname{Perm}\{x // \mathrm{IsMixedPt}\ V\ \sigma\ x\}$. The first
 isomorphism theorem then gives the *exact* factorization `|A| = |\mathrm{range}|\cdot|\mathrm{ker}|`
 that the rest of (A2)'s argument bounds each factor of.
 -/
@@ -18,10 +18,10 @@ variable {Ω ι : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι] [DecidableEq
   {V : ι → Finset Ω} {A : Subgroup (Equiv.Perm Ω)} {σ : Equiv.Perm Ω}
 
 /-- **The mixedness-invariance hypothesis `subtypePerm` needs**, for a single `φ ∈ A`. -/
-theorem isMixed_apply_iff (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
+theorem isMixedPt_apply_iff (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
     (φ : Equiv.Perm Ω) (hφ : φ ∈ A) (x : Ω) :
-    IsMixed V σ (φ x) ↔ IsMixed V σ x := by
+    IsMixedPt V σ (φ x) ↔ IsMixedPt V σ x := by
   constructor
   · intro hx'
     have h := isMixed_apply_of_commute_of_permBlocks hpart hne hperm hcent
@@ -33,9 +33,9 @@ theorem isMixed_apply_iff (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
 /-- **`A` acting on the mixed points.** -/
 noncomputable def restrictToMixed (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ) :
-    A →* Equiv.Perm {x // IsMixed V σ x} where
+    A →* Equiv.Perm {x // IsMixedPt V σ x} where
   toFun φ := Equiv.Perm.subtypePerm (φ : Equiv.Perm Ω)
-    (isMixed_apply_iff hpart hne hperm hcent φ.1 φ.2)
+    (isMixedPt_apply_iff hpart hne hperm hcent φ.1 φ.2)
   map_one' := by
     apply Equiv.ext; intro x; apply Subtype.ext
     simp [Equiv.Perm.subtypePerm_apply]
@@ -47,7 +47,7 @@ noncomputable def restrictToMixed (hpart : IsPartition V) (hne : ∀ i, (V i).No
 @[simp]
 theorem restrictToMixed_apply (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (φ : A) (x : {x // IsMixed V σ x}) :
+    (φ : A) (x : {x // IsMixedPt V σ x}) :
     (restrictToMixed hpart hne hperm hcent φ x : Ω) = (φ : Equiv.Perm Ω) x := rfl
 
 /-- **The exact `|A| = |range| \cdot |ker|` factorization**, via the first isomorphism theorem. -/
@@ -64,11 +64,11 @@ theorem card_eq_card_range_mul_card_ker (hpart : IsPartition V) (hne : ∀ i, (V
 theorem mem_ker_restrictToMixed (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ) (φ : A) :
     φ ∈ MonoidHom.ker (restrictToMixed hpart hne hperm hcent) ↔
-      ∀ x : Ω, IsMixed V σ x → (φ : Equiv.Perm Ω) x = x := by
+      ∀ x : Ω, IsMixedPt V σ x → (φ : Equiv.Perm Ω) x = x := by
   constructor
   · intro hφ x hx
     have h := congrArg
-      (fun e : Equiv.Perm {x // IsMixed V σ x} => (e ⟨x, hx⟩ : {x // IsMixed V σ x})) hφ
+      (fun e : Equiv.Perm {x // IsMixedPt V σ x} => (e ⟨x, hx⟩ : {x // IsMixedPt V σ x})) hφ
     simpa [restrictToMixed] using h
   · intro hfix
     apply Equiv.ext
@@ -77,7 +77,7 @@ theorem mem_ker_restrictToMixed (hpart : IsPartition V) (hne : ∀ i, (V i).None
     simp only [restrictToMixed, MonoidHom.coe_mk, OneHom.coe_mk, Equiv.Perm.subtypePerm_apply]
     exact hfix x.1 x.2
 
-#print axioms isMixed_apply_iff
+#print axioms isMixedPt_apply_iff
 #print axioms restrictToMixed_apply
 #print axioms card_eq_card_range_mul_card_ker
 #print axioms mem_ker_restrictToMixed

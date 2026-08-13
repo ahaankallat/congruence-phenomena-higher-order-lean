@@ -28,11 +28,11 @@ theorem range_factorization_le (hpart : IsPartition V) (hne : ∀ i, (V i).Nonem
     (u : ι)
     (hblock_u : ∀ φ' ∈ MonoidHom.range (restrictToMixed hpart hne hperm hcent),
       (MixedBlock V σ u).image φ' = MixedBlock V σ u)
-    (p₀ : {x // IsMixed V σ x}) (hp₀ : p₀ ∈ MixedBlock V σ u)
+    (p₀ : {x // IsMixedPt V σ x}) (hp₀ : p₀ ∈ MixedBlock V σ u)
     (hune : (MixedBlock V σ u).Nonempty)
     (hmixed : ∀ q ∈ MixedBlock V σ u, ∃ y ∉ MixedBlock V σ u,
       (sigmaMixed hpart σ).SameCycle q y)
-    {j₀ : ι} (hj₀u : j₀ ≠ u) {y₀ : {x // IsMixed V σ x}} (hy₀ : y₀ ∈ MixedBlock V σ j₀)
+    {j₀ : ι} (hj₀u : j₀ ≠ u) {y₀ : {x // IsMixedPt V σ x}} (hy₀ : y₀ ∈ MixedBlock V σ j₀)
     (hp₀y₀ : (sigmaMixed hpart σ).SameCycle p₀ y₀)
     (hconn : ∀ L : Finset ι, L.Nonempty → L ≠ Finset.univ.erase u → L ⊆ Finset.univ.erase u →
       ∃ i ∈ L, ∃ j, j ∉ L ∧ j ≠ u ∧ ∃ x ∈ MixedBlock V σ i, ∃ y ∈ MixedBlock V σ j,
@@ -54,15 +54,15 @@ theorem factorization_le_of_dvd {a b : ℕ} (ha : a ≠ 0) (hb : b ≠ 0) (hdvd 
 unconditional divisibility bound. -/
 theorem card_A_factorization_le (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
     (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
-    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixed V σ x)
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x)
     (u : ι)
     (hblock_u : ∀ φ' ∈ MonoidHom.range (restrictToMixed hpart hne hperm hcent),
       (MixedBlock V σ u).image φ' = MixedBlock V σ u)
-    (p₀ : {x // IsMixed V σ x}) (hp₀ : p₀ ∈ MixedBlock V σ u)
+    (p₀ : {x // IsMixedPt V σ x}) (hp₀ : p₀ ∈ MixedBlock V σ u)
     (hune : (MixedBlock V σ u).Nonempty)
     (hmixed : ∀ q ∈ MixedBlock V σ u, ∃ y ∉ MixedBlock V σ u,
       (sigmaMixed hpart σ).SameCycle q y)
-    {j₀ : ι} (hj₀u : j₀ ≠ u) {y₀ : {x // IsMixed V σ x}} (hy₀ : y₀ ∈ MixedBlock V σ j₀)
+    {j₀ : ι} (hj₀u : j₀ ≠ u) {y₀ : {x // IsMixedPt V σ x}} (hy₀ : y₀ ∈ MixedBlock V σ j₀)
     (hp₀y₀ : (sigmaMixed hpart σ).SameCycle p₀ y₀)
     (hconn : ∀ L : Finset ι, L.Nonempty → L ≠ Finset.univ.erase u → L ⊆ Finset.univ.erase u →
       ∃ i ∈ L, ∃ j, j ∉ L ∧ j ≠ u ∧ ∃ x ∈ MixedBlock V σ i, ∃ y ∈ MixedBlock V σ j,
