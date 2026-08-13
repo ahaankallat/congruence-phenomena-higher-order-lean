@@ -206,3 +206,4 @@ import CongruenceTheoryHigherOrder.A2MixedBlockStructure
 import CongruenceTheoryHigherOrder.A2FullBound
 import CongruenceTheoryHigherOrder.DeltaPermInvariance
 import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIDispatch
+import CongruenceTheoryHigherOrder.WreathFullProduct
