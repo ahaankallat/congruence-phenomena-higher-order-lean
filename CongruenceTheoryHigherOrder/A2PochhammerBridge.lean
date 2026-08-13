@@ -85,6 +85,57 @@ theorem hCbound_of_card_A (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
   simp only [hrw] at hmain
   omega
 
+/-- **`(A2)`'s complete numeric bound**: combining `hCbound_of_card_A` with
+`PochhammerValuation.lean`'s `A2_valuation_bound`, closing the entire arithmetic content of
+`(A2)` — `\mathrm{Fintype.card}\,\iota \cdot v_p(q) + v_p((\mathrm{Fintype.card}\,\iota-2)!) +
+v_p(|A|) \le v_p(H)+1` for `H := q!^{\mathrm{Fintype.card}\,\iota}\cdot
+(\mathrm{Fintype.card}\,\iota-2)!` — still conditional only on the root/connectivity witness
+(the one input specific to `\widetilde H`'s actual wreath structure) and `hVcard` (every block
+has `q` points, true by construction for `K_r(q)`). -/
+theorem A2_numeric_bound (hpart : IsPartition V) (hne : ∀ i, (V i).Nonempty)
+    (hperm : ∀ φ ∈ A, ∀ i, ∃ j, (V i).image φ = V j) (hcent : ∀ φ ∈ A, Commute φ σ)
+    (hMixedNe : ∀ i, ∃ x ∈ V i, IsMixedPt V σ x)
+    (u : ι)
+    (hblock_u : ∀ φ' ∈ MonoidHom.range (restrictToMixed hpart hne hperm hcent),
+      (MixedBlock V σ u).image φ' = MixedBlock V σ u)
+    (p₀ : {x // IsMixedPt V σ x}) (hp₀ : p₀ ∈ MixedBlock V σ u)
+    (hune : (MixedBlock V σ u).Nonempty)
+    (hmixed : ∀ q ∈ MixedBlock V σ u, ∃ y ∉ MixedBlock V σ u,
+      (sigmaMixed hpart σ).SameCycle q y)
+    {j₀ : ι} (hj₀u : j₀ ≠ u) {y₀ : {x // IsMixedPt V σ x}} (hy₀ : y₀ ∈ MixedBlock V σ j₀)
+    (hp₀y₀ : (sigmaMixed hpart σ).SameCycle p₀ y₀)
+    (hconn : ∀ L : Finset ι, L.Nonempty → L ≠ Finset.univ.erase u → L ⊆ Finset.univ.erase u →
+      ∃ i ∈ L, ∃ j, j ∉ L ∧ j ≠ u ∧ ∃ x ∈ MixedBlock V σ i, ∃ y ∈ MixedBlock V σ j,
+        (sigmaMixed hpart σ).SameCycle x y)
+    {p q : ℕ} (hp : p.Prime) (hVcard : ∀ i, (V i).card = q) :
+    (Fintype.card ι) * q.factorization p +
+        (Nat.factorial (Fintype.card ι - 2)).factorization p + (Nat.card A).factorization p ≤
+      (q.factorial ^ (Fintype.card ι) * Nat.factorial (Fintype.card ι - 2)).factorization p + 1 :=
+  by
+  haveI := Fact.mk hp
+  have hCbound := hCbound_of_card_A hpart hne hperm hcent hMixedNe u hblock_u p₀ hp₀ hune hmixed
+    hj₀u hy₀ hp₀y₀ hconn hp hVcard
+  have hR1 : ∀ i ∈ (Finset.univ : Finset ι), 1 ≤ (MixedBlock V σ i).card := by
+    intro i _
+    obtain ⟨x, hx, hxm⟩ := hMixedNe i
+    have : (⟨x, hxm⟩ : {y // IsMixedPt V σ y}) ∈ MixedBlock V σ i := by
+      simp [MixedBlock, hx]
+    exact Finset.card_pos.mpr ⟨_, this⟩
+  have hRq : ∀ i ∈ (Finset.univ : Finset ι), (MixedBlock V σ i).card ≤ q := by
+    intro i _
+    rw [card_mixedBlock_eq_filter, ← hVcard i]
+    exact Finset.card_filter_le _ _
+  have hHval : (q.factorial ^ (Fintype.card ι) * Nat.factorial (Fintype.card ι - 2)).factorization
+      p = (Fintype.card ι) * q.factorial.factorization p +
+        (Nat.factorial (Fintype.card ι - 2)).factorization p := by
+    rw [Nat.factorization_mul (pow_ne_zero _ (Nat.factorial_ne_zero _))
+      (Nat.factorial_ne_zero _), Nat.factorization_pow]
+    simp
+  exact A2_valuation_bound (p := p) (q := q) (r := Fintype.card ι) (ι := ι)
+    (s := Finset.univ) (Finset.card_univ) hR1 hRq hHval hCbound
+
+#print axioms A2_numeric_bound
+
 #print axioms mixedBlock_eq_subtype
 #print axioms card_mixedBlock_eq_filter
 #print axioms card_mixedBlock_add_nonMixed
