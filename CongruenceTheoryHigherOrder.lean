@@ -210,3 +210,4 @@ import CongruenceTheoryHigherOrder.WreathFullProduct
 import CongruenceTheoryHigherOrder.WreathRootEmbedding
 import CongruenceTheoryHigherOrder.InequalityA1Content
 import CongruenceTheoryHigherOrder.FinSwapCons
+import CongruenceTheoryHigherOrder.CompletePrimeLocalCaseIIReindexed
