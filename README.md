@@ -158,26 +158,24 @@ the same classes. What remains is assembling the already-proved pieces
 into a single theorem, together with the still-open parts of (A5) and
 (A6) documented in "Remaining scope" below.
 
-**This does not, however, block `thm:complete-prime-local` or the
-scope-completeness corollary.** Tracing the manuscript's own proofs shows
-neither actually depends on the general statement: both use only its
-single-prime specialization (the "first prime layer" step), whose two
-ingredients are each already, separately, proved here with zero `sorry`,
-depending only on standard axioms: the semiregular wreath-product bound for
-arbitrary `r,q` (`coeff_K_dvd`, `InequalityA1.lean`) and the coefficient
-identity together with Legendre's formula
-(`A3_coeff_eq_factorial`/`factorization_factorial_mul_sub_one`,
-`A3Final.lean`/`LegendreA3.lean`). Combining these two facts into the single
-valuation statement `v_p(cont K_j(p))=e_p(j)` that
-`thm:common-prime-classification` needs is elementary (the coefficient
-identity gives an upper bound on the content's valuation via Legendre's
-formula, the wreath-product bound gives a matching lower bound directly)
-but has not yet been assembled as its own theorem here — unlike the
-cut-vertex gap, this is a mechanical gap, not an open mathematical
-question. The repeated-block, triple, and other structurally distinguished
-closed-form theorems use their own direct arguments, whose dependence on
-the general statement of `thm:atomic-connected-content` was not separately
-re-examined here.
+**This does not block `thm:complete-prime-local` or the scope-completeness
+corollary.** Neither depends on the general statement of
+`thm:atomic-connected-content`; both use only the first-prime-layer step.
+That step is now assembled: `FirstPrimeLayer.lean` proves
+`v_p(cont K_j(p)) = e_p(j)` from the wreath-product bound (`coeff_K_dvd`,
+`InequalityA1.lean`) and the coefficient identity with Legendre's formula
+(`A3Final.lean`, `LegendreA3.lean`), and `TriangularIndependenceFinal.lean`
+proves `cor:triangular-independence`. The common-prime and complete
+prime-local classifications are formalized in all three cases for a general
+tuple (`CommonPrimeClassification*.lean`, `CompletePrimeLocal*.lean`), and
+`LiftAllPrimes.lean` proves the lifting theorem of Part I at every prime
+(`lift_all_primes`), and `LagrangeFamily.lean` proves the Lagrange-type theorem of
+Part I (`lagrange_type`, `lagrange_type_shift`, `a_k_mod_k`, `Aw_mod_n_mul_pred`),
+including a direct proof of Lagrange inversion for formal power series (Mathlib has none).
+Both depend only on `propext`, `Classical.choice`, `Quot.sound`. The package has 219 Lean files (218 under
+`CongruenceTheoryHigherOrder/` plus the root file). The repeated-block,
+triple and other closed-form theorems use their own direct arguments and are
+not formalized.
 
 
 ## File-by-file breakdown and progress notes
