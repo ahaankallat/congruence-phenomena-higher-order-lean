@@ -1,17 +1,19 @@
-# A General Theory of Congruence Phenomena, Part II — Lean
+# Higher-Order Defects of Cycle-Index Polynomials — Lean
 
-A Lean 4 / Mathlib formalization of `Congruence_Phenomena_in_Exponential_Generating_Functions_II_Connected_Cumulants_and_Prime-Local_Higher-Order_Defects.tex`
-("Connected Cumulants and the Complete Prime-Local Classification of
-Higher-Order Defects"), Part II of a two-part manuscript. Depends on
+A Lean 4 / Mathlib formalization of the paper *Higher-Order Defects of
+Cycle-Index Polynomials: Connected Cumulants and a Prime-Local Classification*
+(A. Kallat), together with the lifting theorem at every prime and the
+Lagrange-type theorem of *Universal Shift Congruences for Weighted Permutation
+Sequences*. Depends on
 [`congruence-phenomena-lean`](https://github.com/ahaankallat/congruence-phenomena-lean)
-(Part I) as a Lake library dependency for the shared cycle-index and
+(the main paper's repository) as a Lake library dependency for the shared cycle-index and
 orbit-counting foundations (`Basic`, `Perm`, `OrbitSum`, `CpermEqC`,
 `ContentBounds`, `OptimalDivisorC`, `StrongWeighted`).
 
 ## Status: substantial partial coverage; the headline theorem is not yet closed
 
-Unlike Part I, **this repository does not fully verify Part II's headline
-result.** All of Part II's proofs are ordinary written mathematical proofs,
+Unlike the first repository, **this repository does not fully verify the paper's headline
+result.** All of the second paper's proofs are ordinary written mathematical proofs,
 checked in the usual way; what follows is an honest report of how far this
 independent Lean formalization has gotten, not a claim that the paper's
 results are unverified in the traditional sense.
@@ -168,9 +170,9 @@ That step is now assembled: `FirstPrimeLayer.lean` proves
 proves `cor:triangular-independence`. The common-prime and complete
 prime-local classifications are formalized in all three cases for a general
 tuple (`CommonPrimeClassification*.lean`, `CompletePrimeLocal*.lean`), and
-`LiftAllPrimes.lean` proves the lifting theorem of Part I at every prime
+`LiftAllPrimes.lean` proves the lifting theorem of the main paper at every prime
 (`lift_all_primes`), and `LagrangeFamily.lean` proves the Lagrange-type theorem of
-Part I (`lagrange_type`, `lagrange_type_shift`, `a_k_mod_k`, `Aw_mod_n_mul_pred`),
+the main paper (`lagrange_type`, `lagrange_type_shift`, `a_k_mod_k`, `Aw_mod_n_mul_pred`),
 including a direct proof of Lagrange inversion for formal power series (Mathlib has none).
 Both depend only on `propext`, `Classical.choice`, `Quot.sound`. The package has 219 Lean files (218 under
 `CongruenceTheoryHigherOrder/` plus the root file). The repeated-block,
@@ -1323,8 +1325,8 @@ rebuilding Mathlib from scratch.
 
 ## Scope
 
-This repository covers Part II of the two-part manuscript: higher-order
+This repository covers the second paper of the two-part manuscript: higher-order
 multiplicative defects, the connected-cumulant hierarchy, the atomic
 equal-block content formula, and the complete prime-local classification.
-See Part I's repository, `congruence-phenomena-lean`, for the universal
+See the main paper's repository, `congruence-phenomena-lean`, for the universal
 shift congruence and strong two-adic lift, which are fully verified there.
