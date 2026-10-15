@@ -6,7 +6,7 @@ Cycle-Index Polynomials: Connected Cumulants and a Prime-Local Classification*
 *Universal Shift Congruences for Weighted Permutation Sequences*: the lifting theorem at
 every prime and a Lagrange-type theorem.
 
-The library has 219 files (218 modules in `CongruenceTheoryHigherOrder/` and the root file
+The library has 223 files (222 modules in `CongruenceTheoryHigherOrder/` and the root file
 `CongruenceTheoryHigherOrder.lean`). It contains no `sorry` and declares no `axiom` or
 `opaque`. The headline theorems depend only on `propext`, `Classical.choice` and
 `Quot.sound` (checked with `#print axioms`).
@@ -44,6 +44,10 @@ Names are Lean declarations in the namespace `CongruenceTheory` (file in
 | Lemma `uniform-hypertree-enumerator` (generating-function identity) | `hypertree_enumerator` | `HypertreeEnumerator` |
 | Lifting theorem at every prime (main paper, Theorem 39) | `lift_all_primes` | `LiftAllPrimes` |
 | Lagrange-type theorem (main paper) | `lagrange_type`, `lagrange_type_shift` | `LagrangeFamily` |
+| Lemma `pth-power`, Corollary `odd-prime-power` (namespace `CongruenceTheory.Shift`) | `pth_power_congr`, `odd_prime_power_residue` | `OddPrimePower` |
+| Corollary `eventual-divisibility` (`p = 2` needs `r >= 4`) | `eventual_divisibility_pow`, `eventual_divisibility_iff` | `EventualDivisibility` (uses `PowerOfTwoLocal`) |
+| Theorem `hanna` (A214724) | `hanna_conjecture`, `hanna_converse` | `OEISHannaRichman` |
+| Theorem `richman` (A053871), stated for the weight sequence | `richman_value`, `richman_shift`, `richman_conjecture` | `OEISHannaRichman` |
 
 Precise forms of the classification statements:
 
@@ -68,7 +72,7 @@ for the Pruefer data, without the bijection with hypertrees.
 
 Theorem `atomic-connected-content` is not assembled into a single Lean theorem: the group-action-to-coefficient
 bridge for the second divisor, the root and connectivity witness for the group `H~`, and the link between the
-hypertree enumerator and the coefficients of `K_r(q)` are missing. Also not formalized: the explicit witness
+hypertree enumerator and the coefficients of `K_r(q)` are missing. Also not formalized: Bala's conjecture on A227937 (weights in `Z_(p)`), the sharpness of the lift for odd `p`, van Hoeij's A000459 and the ten-sequence table; the explicit witness
 bounds (Corollaries `one-cycle-witness` and `two-cycle-witness`), the closed formulas of the two subsections
 on singleton blocks (Theorem `two-singleton-collapse` through Theorem `one-singleton-repeated`), and Theorem
 `scope-completeness`.
@@ -83,6 +87,8 @@ lake build
 Toolchain: `leanprover/lean4:v4.31.0` (see `lean-toolchain`), Mathlib `v4.31.0`. To check axioms for
 a theorem, add `#print axioms CongruenceTheory.firstPrimeLayer` (or any name above) to a scratch file that
 imports `CongruenceTheoryHigherOrder`, and run `lake env lean scratch.lean`.
+
+`PowerOfTwoLocal.lean` repeats the proof of Part I's `power_of_two_residue` (as `power_of_two_residue_local`) because the pinned Part I dependency predates that file.
 
 ## Dependency
 
