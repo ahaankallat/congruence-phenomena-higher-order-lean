@@ -6,7 +6,7 @@ Cycle-Index Polynomials: Connected Cumulants and a Prime-Local Classification*
 *Universal Shift Congruences for Weighted Permutation Sequences*: the lifting theorem at
 every prime and a Lagrange-type theorem.
 
-The library has 223 files (222 modules in `CongruenceTheoryHigherOrder/` and the root file
+The library has 224 files (223 modules in `CongruenceTheoryHigherOrder/` and the root file
 `CongruenceTheoryHigherOrder.lean`). It contains no `sorry` and declares no `axiom` or
 `opaque`. The headline theorems depend only on `propext`, `Classical.choice` and
 `Quot.sound` (checked with `#print axioms`).
@@ -48,6 +48,8 @@ Names are Lean declarations in the namespace `CongruenceTheory` (file in
 | Corollary `eventual-divisibility` (`p = 2` needs `r >= 4`) | `eventual_divisibility_pow`, `eventual_divisibility_iff` | `EventualDivisibility` (uses `PowerOfTwoLocal`) |
 | Theorem `hanna` (A214724) | `hanna_conjecture`, `hanna_converse` | `OEISHannaRichman` |
 | Theorem `richman` (A053871), stated for the weight sequence | `richman_value`, `richman_shift`, `richman_conjecture` | `OEISHannaRichman` |
+| Proposition `lift-sharp-odd` (namespace `CongruenceTheory.LiftSharp`) | `lift_sharp_odd` | `LiftSharpOdd` |
+| Remark `lift-sharp`, `p = 2` | `lift_sharp_two`, `lift_sharp_two_not_dvd` | `LiftSharpOdd` |
 
 Precise forms of the classification statements:
 
@@ -63,6 +65,8 @@ Precise forms of the classification statements:
   `kappa` with the number of divisions in (A8) is carried by the `Dc` recursion lemmas
   (`DcOrderStep`, `DcOrderRecursion`, `DcFrobenius`), not by a single tuple-level statement.
 
+Sharpness of the lift: `lift_sharp_odd` states `p^(2s) ∣ c` and `¬ p^(2s+1) ∣ c` for the coefficient `c` of `X_p^(k-2) X_{2p}` in `C_{pk} - C_k^p`; for `p = 2` the coefficient of `X_1^(2k-4) X_4` in `C_{2k} - C_k^2` has valuation `2s - 1` (`+ 1 = 2s` form).
+
 Nearby forms: `tree-modulus` is proved as divisibility by `mu(T)` for each tree `T`, not as the
 least common multiple `M(n)`; `allocation-formula` is proved as a count of tuples of permutations,
 not as the closed sum over matrices; the hypertree enumerator is the generating-function identity
@@ -72,7 +76,7 @@ for the Pruefer data, without the bijection with hypertrees.
 
 Theorem `atomic-connected-content` is not assembled into a single Lean theorem: the group-action-to-coefficient
 bridge for the second divisor, the root and connectivity witness for the group `H~`, and the link between the
-hypertree enumerator and the coefficients of `K_r(q)` are missing. Also not formalized: Bala's conjecture on A227937 (weights in `Z_(p)`), the sharpness of the lift for odd `p`, van Hoeij's A000459 and the ten-sequence table; the explicit witness
+hypertree enumerator and the coefficients of `K_r(q)` are missing. Also not formalized: Bala's conjecture on A227937 (weights in `Z_(p)`), van Hoeij's A000459 and the ten-sequence table; the explicit witness
 bounds (Corollaries `one-cycle-witness` and `two-cycle-witness`), the closed formulas of the two subsections
 on singleton blocks (Theorem `two-singleton-collapse` through Theorem `one-singleton-repeated`), and Theorem
 `scope-completeness`.

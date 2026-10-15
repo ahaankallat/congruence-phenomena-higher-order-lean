@@ -220,3 +220,4 @@ import CongruenceTheoryHigherOrder.OddPrimePower
 import CongruenceTheoryHigherOrder.PowerOfTwoLocal
 import CongruenceTheoryHigherOrder.EventualDivisibility
 import CongruenceTheoryHigherOrder.OEISHannaRichman
+import CongruenceTheoryHigherOrder.LiftSharpOdd
