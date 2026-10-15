@@ -1,15 +1,14 @@
-# Higher-Order Defects of Cycle-Index Polynomials: Lean formalization
+# Higher-order defects of cycle-index polynomials (Lean 4)
 
-A Lean 4 / Mathlib formalization of parts of the paper *Higher-Order Defects of
-Cycle-Index Polynomials: Connected Cumulants and a Prime-Local Classification*
-(A. Kallat), together with two further results from the main paper
-*Universal Shift Congruences for Weighted Permutation Sequences*: the lifting theorem at
-every prime and a Lagrange-type theorem.
+This repository contains Lean 4 and Mathlib formalizations of two bodies of work by Ahaan Kallat. The first is the paper *Higher-Order Defects of Cycle-Index Polynomials: Connected Cumulants and a Prime-Local Classification*. It asks, when a set of N points is cut into blocks of sizes n_1, …, n_r, which integers divide every coefficient of A(N) − A(n_1)⋯A(n_r) as a polynomial in the cycle weights, and it answers prime by prime using connected cumulants of permutations. The second is a group of theorems from *Universal Shift Congruences for Weighted Permutation Sequences* ([arXiv:2610.15849](https://arxiv.org/abs/2610.15849)): the lifting theorem at every prime and its sharpness, the closed formula for A_w(p^r) modulo p^r, eventual divisibility, the shift congruence for weights with p-integral denominators, the Lagrange-inversion family, and the OEIS conjectures of Hanna, Richman and Bala (A227937).
+
+The shared cycle-index foundations live in [`congruence-phenomena-lean`](https://github.com/ahaankallat/congruence-phenomena-lean), which this library uses as a Lake dependency.
 
 The library has 226 files (225 modules in `CongruenceTheoryHigherOrder/` and the root file
 `CongruenceTheoryHigherOrder.lean`). It contains no `sorry` and declares no `axiom` or
 `opaque`. The headline theorems depend only on `propext`, `Classical.choice` and
 `Quot.sound` (checked with `#print axioms`).
+
 
 ## The paper in one paragraph
 
@@ -119,3 +118,7 @@ library of the main paper) as a Lake dependency, for the shared definitions (`Ba
 ## History
 
 `docs/PROGRESS_LOG.md` is the original development log, kept for reference. It is out of date.
+
+## License and citation
+
+The code is released under the Apache License 2.0 (see `LICENSE`). Citation details are in `CITATION.cff`, and GitHub shows a "Cite this repository" button.

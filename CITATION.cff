@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite the paper below."
+title: "Lean 4 formalization of 'Higher-Order Defects of Cycle-Index Polynomials' and further theorems on weighted permutation sequences"
+type: software
+authors:
+  - family-names: Kallat
+    given-names: Ahaan
+    affiliation: "Northeastern University"
+repository-code: "https://github.com/ahaankallat/congruence-phenomena-higher-order-lean"
+license: Apache-2.0
+abstract: "Lean 4 and Mathlib formalization of the connected-cumulant classification of higher-order defects of cycle-index polynomials, together with the lift at every prime, the odd-prime closed formula, eventual divisibility, the Lagrange family and the OEIS conjectures of Hanna, Richman and Bala."
+keywords:
+  - "lean4"
+  - "mathlib"
+  - "formal verification"
+  - "connected cumulants"
+  - "cycle index"
+  - "congruences"
+  - "p-adic valuation"
+  - "OEIS"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Kallat
+      given-names: Ahaan
+  title: "Universal Shift Congruences for Weighted Permutation Sequences"
+  year: 2026
+  journal: "arXiv:2610.15849"
+  url: "https://arxiv.org/abs/2610.15849"
